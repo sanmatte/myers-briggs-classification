@@ -1,0 +1,79 @@
+import plot
+import ourTest
+import decision_tree
+import pandas as pd
+import numpy as np
+from simple_term_menu import TerminalMenu
+
+
+def start_menu():
+
+    main_options = [" [1] Data Analysis", " [2] Classificatori a confronto", " [3] Data Analysis", "[4] Quit"]
+    classifier_options = ["  [a] Decision-Tree (Scikit-learn)", "  [b] kNN (Scikit-learn)", "  [c] Clustering (Scikit-learn)", "  [d] Decison-Tree (Custom)", "  [e] kNN (Custom)"]
+    verbose_options = ["  [a] Alto", "  [b] Basso"]
+
+    mainMenu = TerminalMenu(main_options, title = "MAIN MENU")
+    classifierMenu = TerminalMenu(classifier_options, title = "CLASSIFICATORI A CONFRONTO") 
+    verboseMenu = TerminalMenu(classifier_options, title = "LIVELLO DI DETTAGLIO")
+
+    quitting = False
+
+    #----------- MAIN MENU ----------#
+    while quitting == False:
+        optionsIndex = mainMenu.show()
+        optionsChoice = main_options[optionsIndex]
+
+        # '[1] Data Analysis'
+        if optionsChoice == "[1] Data Analysis":
+            verboseIndex = verboseMenu.show()
+            verboseChoice = verbose_options[verboseIndex]
+
+            if verboseChoice == "  [a] Alto":
+                # Fornisce informazioni generali sul dataset (Summary)
+                df.describe().T
+
+            if verboseChoice == "  [b] Basso":
+                ...
+
+        # '[2] Classificatori a confronto'
+        if(optionsChoice == "[2] Classificatori a confronto"):
+            classifierIndex = classifierMenu.show()
+            classifierChoice = classifier_options[classifierIndex]
+
+            if classifierChoice == "  [a] Decision-Tree (Scikit-learn)":
+                decision_tree.DecisionTree_with_tuning(df)
+
+            if classifierChoice == "  [b] kNN (Scikit-learn)":
+                ...
+
+            if classifierChoice == "  [c] Clustering (Scikit-learn)":
+                ...
+            
+            if classifierChoice == "[d] Decison-Tree (Custom)":
+                ...
+
+            if classifierChoice ==  "  [e] kNN (Custom)":
+                ...
+
+        # '[3] Fai il test'
+        if optionsChoice == "[3] Fai il test":
+            ourtest.start_survey()
+
+        # '[4] Quit' 
+        if optionsChoice == "[4] Quit":
+            quitting = True
+
+
+if __name__ == "__main__":
+
+    # Legge il file csv dal path specificato e lo inserisce in un dataframe pandas
+    df = pd.read_csv('16P.csv', encoding='cp1252') # 0x92 is usually a smart quote in the windows-1252 encoding.It is not a valid UTF-8 character, so that's why csv refuses to parse it. (from reddit)
+
+    # Divide il dataframe in data-matrix (X) e label-vector (y)
+    X = df.iloc[:, 1:(len(df.columns) - 1)]
+    y = df.iloc[:, len(df.columns)-1:]
+    pd.options.display.max_rows = 5000                 
+
+    # Menu Principale di scelta
+    start_menu()
+

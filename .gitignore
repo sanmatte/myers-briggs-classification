@@ -2,7 +2,4 @@
 *.logs
 *.log
 .DS_Store
-*.png
 *.svg
-*.jpg
-*.jpeg
