@@ -8,13 +8,13 @@ from simple_term_menu import TerminalMenu
 
 def start_menu():
 
-    main_options = [" [1] Data Analysis", " [2] Classificatori a confronto", " [3] Data Analysis", "[4] Quit"]
-    classifier_options = ["  [a] Decision-Tree (Scikit-learn)", "  [b] kNN (Scikit-learn)", "  [c] Clustering (Scikit-learn)", "  [d] Decison-Tree (Custom)", "  [e] kNN (Custom)"]
-    verbose_options = ["  [a] Alto", "  [b] Basso"]
+    main_options = [" [1] Data Analysis", " [2] Classificatori a confronto", " [3] Fai il test", " [4] Quit"]
+    classifier_options = ["  [a] Decision-Tree (Scikit-learn)", "  [b] kNN (Scikit-learn)", "  [c] Clustering (Scikit-learn)", "  [d] Decison-Tree (Custom)", "  [e] kNN (Custom)", "  [f] Return to Main Menu"]
+    verbose_options = [" [a] Alto", " [b] Basso"]
 
     mainMenu = TerminalMenu(main_options, title = "MAIN MENU")
     classifierMenu = TerminalMenu(classifier_options, title = "CLASSIFICATORI A CONFRONTO") 
-    verboseMenu = TerminalMenu(classifier_options, title = "LIVELLO DI DETTAGLIO")
+    verboseMenu = TerminalMenu(verbose_options, title = "LIVELLO DI DETTAGLIO")
 
     quitting = False
 
@@ -24,43 +24,48 @@ def start_menu():
         optionsChoice = main_options[optionsIndex]
 
         # '[1] Data Analysis'
-        if optionsChoice == "[1] Data Analysis":
+        if optionsChoice == main_options[0]:
             verboseIndex = verboseMenu.show()
             verboseChoice = verbose_options[verboseIndex]
 
-            if verboseChoice == "  [a] Alto":
+            if verboseChoice == " [a] Alto":
                 # Fornisce informazioni generali sul dataset (Summary)
-                df.describe().T
+                print(df.describe().T)
 
-            if verboseChoice == "  [b] Basso":
+            if verboseChoice == " [b] Basso":
                 ...
 
         # '[2] Classificatori a confronto'
-        if(optionsChoice == "[2] Classificatori a confronto"):
-            classifierIndex = classifierMenu.show()
-            classifierChoice = classifier_options[classifierIndex]
+        if optionsChoice ==  main_options[1]:
+            returnToMainMenu = False
+            while(returnToMainMenu == False):
+                classifierIndex = classifierMenu.show()
+                classifierChoice = classifier_options[classifierIndex]
 
-            if classifierChoice == "  [a] Decision-Tree (Scikit-learn)":
-                decision_tree.DecisionTree_with_tuning(df)
+                if classifierChoice == "  [a] Decision-Tree (Scikit-learn)":
+                    decision_tree.DecisionTree_with_tuning(X, y)
 
-            if classifierChoice == "  [b] kNN (Scikit-learn)":
-                ...
+                if classifierChoice == "  [b] kNN (Scikit-learn)":
+                    ...
 
-            if classifierChoice == "  [c] Clustering (Scikit-learn)":
-                ...
-            
-            if classifierChoice == "[d] Decison-Tree (Custom)":
-                ...
+                if classifierChoice == "  [c] Clustering (Scikit-learn)":
+                    ...
+                
+                if classifierChoice == "[d] Decison-Tree (Custom)":
+                    ...
 
-            if classifierChoice ==  "  [e] kNN (Custom)":
-                ...
+                if classifierChoice ==  "  [e] kNN (Custom)":
+                    ...
+
+                if classifierChoice == "  [f] Return to Main Menu":
+                    returnToMainMenu = True
 
         # '[3] Fai il test'
-        if optionsChoice == "[3] Fai il test":
-            ourtest.start_survey()
+        if optionsChoice ==  main_options[2]:
+            ourTest.start_survey()
 
         # '[4] Quit' 
-        if optionsChoice == "[4] Quit":
+        if optionsChoice ==  main_options[3]:
             quitting = True
 
 
@@ -76,4 +81,3 @@ if __name__ == "__main__":
 
     # Menu Principale di scelta
     start_menu()
-
