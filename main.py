@@ -3,6 +3,7 @@ import knn_features
 import ourTest
 import decision_tree
 import knn
+import random_forest
 import pandas as pd
 import numpy as np
 from simple_term_menu import TerminalMenu
@@ -53,8 +54,8 @@ def start_menu():
                 if classifierChoice == classifier_options[2]:
                     knn_features.kNN_classifier_with_Feature_Selection(X, y)
                 
-                if classifierChoice == "[d] Decison-Tree (Custom)":
-                    ...
+                if classifierChoice == classifier_options[4]:
+                    random_forest.random_forest_classifier(X, y)
 
                 if classifierChoice ==  "  [e] kNN (Custom)":
                     ...
