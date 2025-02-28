@@ -1,6 +1,7 @@
 import plot
 import ourTest
 import decision_tree
+import knn
 import pandas as pd
 import numpy as np
 from simple_term_menu import TerminalMenu
@@ -46,7 +47,7 @@ def start_menu():
                     decision_tree.DecisionTree_with_tuning(X, y)
 
                 if classifierChoice == "  [b] kNN (Scikit-learn)":
-                    ...
+                    knn.KNN_classifier_with_tuning(X, y)
 
                 if classifierChoice == "  [c] Clustering (Scikit-learn)":
                     ...
@@ -75,8 +76,10 @@ if __name__ == "__main__":
     df = pd.read_csv('16P.csv', encoding='cp1252') # 0x92 is usually a smart quote in the windows-1252 encoding.It is not a valid UTF-8 character, so that's why csv refuses to parse it. (from reddit)
 
     # Divide il dataframe in data-matrix (X) e label-vector (y)
-    X = df.iloc[:, 1:(len(df.columns) - 1)]
-    y = df.iloc[:, len(df.columns)-1:]
+    # X = df.iloc[:, 1:(len(df.columns) - 1)]
+    # y = df.iloc[:, len(df.columns)-1:]
+    X = df.drop(['Personality', 'Response Id'], axis=1)
+    y = df['Personality']
     pd.options.display.max_rows = 5000                 
 
     # Menu Principale di scelta
