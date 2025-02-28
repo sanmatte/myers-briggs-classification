@@ -1,9 +1,10 @@
 import matplotlib.pyplot as mpl
+from tabulate import tabulate
 
 # Mostra la distribuzione del dataset - Evidenzia la distribuzione ≈ Uniforme
 def distribution_chart(df):
 
-    # Specifica il numnero di bins == 16 (personalità)
+    # Specifica il numero di bins == 16 (personalità)
     df['Personality'].hist(bins=16)
 
     # Aggiunge il titolo e le etichette

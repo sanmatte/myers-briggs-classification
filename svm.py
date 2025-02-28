@@ -2,8 +2,7 @@ import pandas as pd
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
-import seaborn as sns
+from sklearn.metrics import accuracy_score, classification_report
 import matplotlib.pyplot as plt
 
 
@@ -15,7 +14,7 @@ def SVM_classifier_with_tuning(X, y):
     }
 
     # Suddivisione in training e test set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
 
     # Standardizzazione delle feature
     scaler = StandardScaler()
