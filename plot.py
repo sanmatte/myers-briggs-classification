@@ -14,14 +14,13 @@ def distribution_chart(df):
     mpl.show()
 
 # Confronta l'accuratezza dei modelli addestrati sul training set e sul test set
-def trainingAccuracy_vs_testAccuracy_chart(max_depth_range, acc_train, acc_test):
-    mpl.plot(max_depth_range, acc_train, lw=2, color='r')
-    mpl.plot(max_depth_range, acc_test, lw=2, color='b')
-    mpl.xlim([1, max(max_depth_range)])
-    mpl.grid(True, axis = 'both', zorder = 0, linestyle = ':', color = 'k')
-    mpl.tick_params(labelsize = 18)
-    mpl.xlabel('max_depth', fontsize = 24)
-    mpl.ylabel('Accuracy', fontsize = 24)
-    mpl.title('Model Performances', fontsize = 24)
-    mpl.legend(['Train', 'Test'])
+def trainingAccuracy_vs_testAccuracy_chart(x_scale, y_scale, acc_train, acc_test, curve1_label, curve2_label, x_label, y_label, plot_title):
+    mpl.figure(figsize=(8, 5))
+    mpl.plot(x_scale, acc_train, label = curve1_label, lw=2, marker='o')
+    mpl.plot(y_scale, acc_test, label = curve2_label, lw=2, marker='s')
+    mpl.grid()
+    mpl.xlabel(x_label, fontsize = 15)
+    mpl.ylabel(y_label, fontsize = 15)
+    mpl.title(plot_title, fontsize = 22)
+    mpl.legend()
     mpl.show()

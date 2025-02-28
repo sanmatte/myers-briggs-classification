@@ -40,6 +40,6 @@ def DecisionTree_with_tuning(X, y):
 
     # Stampa l'acuratezza migliore in seguito al TUNING degli Iperparametri (max-depth)
     print(f"Acuratezza migliore in fase di test: {max(acc_test)}\n Iperparametro max-depth: {acc_test.index(max(acc_test))}: ")
-    plot.trainingAccuracy_vs_testAccuracy_chart(max_depth_range, acc_train, acc_test)
+    plot.trainingAccuracy_vs_testAccuracy_chart(max_depth_range, max_depth_range, acc_train, acc_test, "Training Accuracy", "Test Accuracy", "Tree Depth", "Accuracy", "Tuning Decision Tree")
 
             
