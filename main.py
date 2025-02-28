@@ -2,6 +2,7 @@ import plot
 import knn_features
 import ourTest
 import decision_tree
+import ensambe_custom
 import knn
 import random_forest
 import pandas as pd
@@ -54,11 +55,11 @@ def start_menu():
                 if classifierChoice == classifier_options[2]:
                     knn_features.kNN_classifier_with_Feature_Selection(X, y)
                 
-                if classifierChoice == classifier_options[4]:
+                if classifierChoice == classifier_options[3]:
                     random_forest.random_forest_classifier(X, y)
 
-                if classifierChoice ==  "  [e] kNN (Custom)":
-                    ...
+                if classifierChoice ==  classifier_options[4]:
+                    ensambe_custom.ensamble_classifiers(X, y)
 
                 if classifierChoice == "  [f] Return to Main Menu":
                     returnToMainMenu = True
