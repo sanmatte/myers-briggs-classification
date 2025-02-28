@@ -49,3 +49,6 @@ def SVM_classifier_with_tuning(X, y):
     
     print("\nClassification Report:")
     print(classification_report(y_test, y_test_pred))
+
+#! Missing without tuning
+#! Missing with feature selection

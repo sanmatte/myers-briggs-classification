@@ -34,16 +34,21 @@ def data_analysis(df):
     print(df.groupby('Personality').agg({'Personality': 'count'}))
     print('\n------------------------------------------------------------------------------------------------------------------------------------')
 
-def start_menu():
+FEATURES_SWITCH = {0: 'OFF', 1: 'ON'}
+switch_value = 0
 
+def start_menu():
+    global switch_value
     # Liste delle opzioni per i diversi menù e sotto-menù
-    main_options = [" [1] Data Analysis", " [2] Pre-processing", " [3] Classificatori", " [4] Fai il test", " [5] Quit"]
-    classifier_options = [" [a] kNN (Scikit-learn)", " [b] Random Forest(Scikit-learn)", " [c] SVM (Scikit-learn)", " [d] Naive-Bayes (Custom)", " [e] Ensemble (Custom)", " [f] Return to Main Menu"]
-    pre_pro_options = [" [a] Attiva Feature Selection", " [b] Disattiva Feature Selection", " [c] Simula Undersampling",]
+    main_options = [" [1] Data Analysis", " [2] Pre-processing", " [3] Classificatori", " [4] Fai il test", " [0] Esci"]
+    classifier_options = [" [3.1] kNN (Scikit-learn)", " [3.2] Random Forest(Scikit-learn)", " [3.3] SVM (Scikit-learn)", " [3.4] Naive-Bayes (Custom)", " [3.5] Ensemble (Custom)", " [0] Indietro"]
+    pre_pro_options = [f" [2.1] Feature Selection: {FEATURES_SWITCH[switch_value]}", " [2.2] Undersampling", " [2.3] Oversampling", " [0] Indietro"]
+    back_exit_options = [" [0] Indietro", " [1] Esci"]
 
     # Istanze dei menù
     mainMenu = TerminalMenu(main_options, title = "MAIN MENU")
-    classifierMenu = TerminalMenu(classifier_options, title = "CLASSIFICATORI A CONFRONTO") 
+    classifierMenu = TerminalMenu(classifier_options, title = "CLASSIFICATORI A CONFRONTO")
+    back_exit_menu = TerminalMenu(back_exit_options, title = "OPZIONI")
 
     # Flag principale impiegato nel loop del menù principale
     quitting = False
@@ -59,10 +64,30 @@ def start_menu():
 
         # >>> [2] Pre-processing
         if optionsChoice ==  main_options[1]:
-            ...
+            exit_pre_processing_settings = False
+            while exit_pre_processing_settings == False:
+                pre_processing_index = TerminalMenu(pre_pro_options, title = "PRE-PROCESSING").show()
+                pre_pro_choice = pre_pro_options[pre_processing_index]
+                if pre_pro_choice == pre_pro_options[0]:
+                    switch_value = 1 - switch_value
+                    pre_pro_options[0] = f" [a] Feature Selection: {FEATURES_SWITCH[switch_value]}"
+                if pre_pro_choice == pre_pro_options[1]:
+                    plot.plot_undersampling(X, y)
+                if pre_pro_choice == pre_pro_options[2]:
+                    plot.plot_oversampling(X, y)
+                if pre_pro_choice == pre_pro_options[3]:
+                    exit_pre_processing_settings = True
+
 
         # >>> [3] Classificatori
         if optionsChoice ==  main_options[2]:
+            classifiers_array = []
+            if switch_value == 0:
+                classifiers_array = [knn.KNN_classifier_with_tuning, random_forest.random_forest_classifier, svm.SVM_classifier_with_tuning, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
+            else:
+                classifiers_array = [knn_features.kNN_classifier_with_Feature_Selection, random_forest.random_forest_classifier, svm.SVM_classifier_with_tuning, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
+                #! TO FIX: implement feature selection for all classifiers
+                
             returnToMainMenu = False
             while(returnToMainMenu == False):
                 classifierIndex = classifierMenu.show()
@@ -70,23 +95,32 @@ def start_menu():
                 
                 # [a] kNN (Scikit-learn)
                 if classifierChoice == classifier_options[0]:
-                    knn.KNN_classifier_with_tuning(X, y)
+                    classifiers_array[0](X, y)
 
                 # [b] Random Forest(Scikit-learn)
                 if classifierChoice == classifier_options[1]:
-                    random_forest.random_forest_classifier(X, y)
+                    classifiers_array[1](X, y)
 
                 # [c] SVM (Scikit-learn)
                 if classifierChoice == classifier_options[2]:
-                    svm.SVM_classifier_with_tuning(X, y)
+                    classifiers_array[2](X, y)
 
+
+                ##### ! TO FIX: SOME MENU LOGIC IS MISSING HERE #####
+                ##### ! TO FIX: SOME MENU LOGIC IS MISSING HERE #####
+                ##### ! TO FIX: SOME MENU LOGIC IS MISSING HERE #####
+                ##### ! TO FIX: SOME MENU LOGIC IS MISSING HERE #####
+                ##### ! TO FIX: SOME MENU LOGIC IS MISSING HERE #####
                 # [d] Naive-Bayes (Custom)
                 if classifierChoice == classifier_options[3]:
-                    naive_bayes_custom.Naive_Bayes_Custom(X, y)
+                    classifiers_array[3](X, y)
+                    r = back_exit_menu.show()
+                    if r == 1:
+                        returnToMainMenu = True
 
                 # [e] Ensemble (Custom)
                 if classifierChoice ==  classifier_options[4]:
-                    ensambe_custom.ensamble_classifiers(X, y)
+                    classifiers_array[4](X, y)
 
                 # [f] Return to Main Menu
                 if classifierChoice == classifier_options[5]:
