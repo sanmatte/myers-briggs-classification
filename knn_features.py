@@ -1,7 +1,7 @@
 
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import KFold
 import plot
@@ -11,6 +11,8 @@ def kNN_classifier_with_Feature_Selection(X, y):
         
     # Calcola la varianza di ogni colonna
     variances = X.var()
+    mediana = variances.median()
+    print(f'Mediana delle varianze: {mediana}')
 
     # ----------------   KNN with ALL features  ----------------
     # Dividi il dataset in train e test set
@@ -29,11 +31,11 @@ def kNN_classifier_with_Feature_Selection(X, y):
     test_accuracy = accuracy_score(y_test, y_test_pred)
 
     print("KNN with ALL features")
-    print(f'Accuratezza sul TRAIN: {train_accuracy:.3f}')
-    print(f'Accuratezza sul TEST: {test_accuracy:.3f}')
+    print(f'Accuratezza sul TRAIN: {train_accuracy: }')
+    print(f'Accuratezza sul TEST: {test_accuracy: }\n')
 
     # Valori di soglia più significativi
-    thresholds = [0.2, 2.2, 2.3]
+    thresholds = [2.000, 2.100, 2.159, 2.199]
 
     for threshold in thresholds:
         # ----------------   KNN with FEATURE SELECTION  ----------------
@@ -55,13 +57,13 @@ def kNN_classifier_with_Feature_Selection(X, y):
         y_test_pred = knn.predict(X_test)
 
         # Calcola l'accuratezza
-        feature_train_accuracy = accuracy_score(y_train, y_train_pred)
-        feature_test_accuracy = accuracy_score(y_test, y_test_pred)
+        feature_train_accuracy = classification_report(y_train, y_train_pred)
+        feature_test_accuracy = classification_report(y_test, y_test_pred)
 
-        print("KNN with FEATURE SELECTION")
-        print(f'Accuratezza sul TRAIN: {feature_train_accuracy:.3f}')
-        print(f'Accuratezza sul TEST: {feature_test_accuracy:.3f}')
-        print()
+       # Stampa i report
+        print(f"KNN Report:")
+        print(f'Metriche sul TRAIN:\n{feature_train_accuracy}')
+        print(f'Metriche sul TEST:\n{feature_test_accuracy}\n')
     
 
 

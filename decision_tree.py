@@ -10,7 +10,9 @@ def DecisionTree_with_tuning(X, y):
     acc_train = []
     acc_test = []
 
+    # ----------------  DECISION TREE with ALL features  ----------------
     # Tuning dell'iperparametro max_depth
+    print("DECISION TREE with ALL features")
     max_depth_range = list(range(1, 20))
     for depth in max_depth_range:
         # Fit depth-esimo DecisionTreeClassifier con max_depth = depth
@@ -27,9 +29,6 @@ def DecisionTree_with_tuning(X, y):
         dTree_clf.fit(train_x, train_y)
         print(f"training {depth}-esimo classificatore ...")
 
-        # Uso della funzione .predict(...)
-        # pred_y = dTree_clf.predict(test_x)
-
         # Calcola l'accuracy in fase di training e test con iperparametro depth-esimo
         score_train = dTree_clf.score(train_x, train_y) # accuracy training
         score_test = dTree_clf.score(test_x, test_y)    # generalization training
@@ -39,7 +38,44 @@ def DecisionTree_with_tuning(X, y):
         acc_test.append(score_test)
 
     # Stampa l'acuratezza migliore in seguito al TUNING degli Iperparametri (max-depth)
-    print(f"Acuratezza migliore in fase di test: {max(acc_test)}\n Iperparametro max-depth: {acc_test.index(max(acc_test))}: ")
-    plot.trainingAccuracy_vs_testAccuracy_chart(max_depth_range, max_depth_range, acc_train, acc_test, "Training Accuracy", "Test Accuracy", "Tree Depth", "Accuracy", "Tuning Decision Tree")
+    print(f"Accuratezza migliore in fase di test: {max(acc_test)}\n Iperparametro max-depth: {acc_test.index(max(acc_test))}: ")
 
-            
+    # ----------------  DECISION TREE with Feature Selection  ----------------
+    print("\nDECISION TREE with Feature Selection")
+    variances = X.var()
+    thresholds = [0.2, 2, 2.3]
+
+
+    for threshold in thresholds:
+        #Rinizio le liste per ogni threshold
+        acc_test = []
+        acc_train = []
+        # Seleziona le colonne con varianza maggiore di del threshold
+        selected_columns = variances[variances > threshold].index.tolist()
+        X_selected = X[selected_columns]
+        print(f'N° Colonne selezionate: {len(selected_columns)} con threshold: {threshold}')
+
+        for depth in max_depth_range:
+            # Fit depth-esimo DecisionTreeClassifier con max_depth = depth
+            dTree_clf = DecisionTreeClassifier(criterion="gini", max_depth = depth)
+
+            train_x, test_x, train_y, test_y = train_test_split(X_selected, y, random_state = 42, test_size=0.2)
+
+            # Fit del Decision Tree depth-esimo
+            dTree_clf.fit(train_x, train_y)
+            #print(f"training {depth}-esimo classificatore ...")
+
+            # Calcola l'accuracy in fase di training e test con iperparametro depth-esimo
+            score_train = dTree_clf.score(train_x, train_y) # accuracy training
+            score_test = dTree_clf.score(test_x, test_y)    # generalization training
+
+            # Aggiunge i valori appena calcolati alle liste, utili a stampare il plot per confronrare le curve delle due accuracy
+            acc_train.append(score_train)
+            acc_test.append(score_test)
+
+        print(f"Accuratezza migliore in fase di test: {max(acc_test)}\n Iperparametro max-depth: {acc_test.index(max(acc_test))}: ")
+        print(f"Accuracy in fase di test: {score_test}")
+        print(f"Accuracy in fase di training: {score_train}\n")
+
+    # Stampa l'acuratezza migliore in seguito al TUNING degli Iperparametri (max-depth)
+   
