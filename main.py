@@ -1,4 +1,5 @@
 import plot
+import knn_features
 import ourTest
 import decision_tree
 import knn
@@ -10,7 +11,7 @@ from simple_term_menu import TerminalMenu
 def start_menu():
 
     main_options = [" [1] Data Analysis", " [2] Classificatori a confronto", " [3] Fai il test", " [4] Quit"]
-    classifier_options = ["  [a] Decision-Tree (Scikit-learn)", "  [b] kNN (Scikit-learn)", "  [c] Clustering (Scikit-learn)", "  [d] Decison-Tree (Custom)", "  [e] kNN (Custom)", "  [f] Return to Main Menu"]
+    classifier_options = ["  [a] Decision-Tree (Scikit-learn)", "  [b] kNN (Scikit-learn)", "  [c] kNN con features(Scikit-learn)", "  [d] Decison-Tree (Custom)", "  [e] kNN (Custom)", "  [f] Return to Main Menu"]
     verbose_options = [" [a] Alto", " [b] Basso"]
 
     mainMenu = TerminalMenu(main_options, title = "MAIN MENU")
@@ -49,8 +50,8 @@ def start_menu():
                 if classifierChoice == "  [b] kNN (Scikit-learn)":
                     knn.KNN_classifier_with_tuning(X, y)
 
-                if classifierChoice == "  [c] Clustering (Scikit-learn)":
-                    ...
+                if classifierChoice == classifier_options[2]:
+                    knn_features.kNN_classifier_with_Feature_Selection(X, y)
                 
                 if classifierChoice == "[d] Decison-Tree (Custom)":
                     ...
