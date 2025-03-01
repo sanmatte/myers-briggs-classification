@@ -96,7 +96,7 @@ def start_menu():
                 threshold = 2.0
                 variances = X.var()
                 X_selected = X[variances[variances > threshold].index.tolist()]
-                classifiers_array = [knn_features.kNN_classifier_with_Feature_Selection, random_forest.random_forest_classifier, svm.SVM_classifier_with_tuning, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
+                #classifiers_array = [knn_features.kNN_classifier_with_Feature_Selection, random_forest.random_forest_classifier, svm.SVM_classifier_with_tuning, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
                 #! TO FIX: implement feature selection for all classifiers
                 
             returnToMainMenu = False
@@ -112,7 +112,7 @@ def start_menu():
                         knn.KNN_classifier(X, y)
                     else:
                         # remove this to calculate yourself the best threshold
-                        # threshold, X_selected = knn_features.better_threshold(X, y, knn.KNN_classifier, k=4)
+                        threshold, X_selected = knn_features.better_threshold(X, y, knn.KNN_classifier, k=4)
                         knn.KNN_classifier(X_selected, y)
                     
 
