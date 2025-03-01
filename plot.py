@@ -2,18 +2,17 @@ import matplotlib.pyplot as mpl
 import seaborn as sns
 
 # Mostra la matrice di correlazione fra le diverse domande
-
-def correlation_matrix_chart(df):
+def correlation_matrix_chart(X, corr_method):
 
     # Calcolo della matrice di correlazione
-    correlation_matrix = df.corr()
+    correlation_matrix = X.corr(method = corr_method)
 
     # Creazione della figura
     mpl.figure(figsize=(8, 7))
     sns.heatmap(correlation_matrix, cmap="coolwarm", annot=False, fmt=".2f", linewidths=0.5)
 
     # Mostra il grafico
-    mpl.title("Matrice di Correlazione", fontsize = 18)
+    mpl.title(f"Matrice di Correlazione - Coefficiente di correlazione: {corr_method}", fontsize = 18)
     mpl.show()
 
 # Mostra la distribuzione del dataset - Evidenzia la distribuzione ≈ Uniforme

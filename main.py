@@ -23,10 +23,11 @@ def data_analysis(X):
     tmp_X = deepcopy(X)
     qq = ['Q'+str(i) for i in range(1,len(tmp_X.columns)+1)]
     tmp_X.columns = qq
-    print(tmp_X.corr())
+    corr_method = "kendall"
+    print(tmp_X.corr(method = corr_method))
 
     # Se vuoi visualizzare il plot della matrice di correlazione, scommenta questa riga
-    plot.correlation_matrix_chart(tmp_X)
+    plot.correlation_matrix_chart(tmp_X, corr_method)
 
     # Fornisce delle STATISTICHE GENERALI riguardo il dataset
     print('\n------------------------------------------------------------------------------------------------------------------------------------')
