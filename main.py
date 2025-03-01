@@ -1,4 +1,4 @@
-import test.ourTest as ourTest
+import testing.ourTest as ourTest
 import utils.plot as plot
 import cls.knn as knn
 import preprocessing.feature_selection as feature_selection
@@ -12,6 +12,7 @@ import cls.ensambe_custom as ensambe_custom
 import pandas as pd
 import numpy as np
 from simple_term_menu import TerminalMenu
+import preprocessing.preprocessing as pp
 
 def data_analysis(X):
     
@@ -41,15 +42,24 @@ def data_analysis(X):
     print('\n------------------------------------------------------------------------------------------------------------------------------------')
 
 FEATURES_SWITCH = {0: 'OFF', 1: 'ON'}
-switch_value = 0
+feature_sel_switch = 0
+OVER_SAMPLING_LIST = ['OFF', 'SMOTE', 'Random OverSampler', 'Oversampling + Undersampling']
+UNDER_SAMPLING_LIST = ['OFF', 'Cluster Centroids','Random UnderSampler', 'Oversampling + Undersampling']
+SAMPLING_FUNCTIONS = {0: pp.smote, 1: pp.random_over, 2: pp.hybrid_resampling ,3: pp.cluster_centroids, 4: pp.random_under, 5: pp.hybrid_resampling}
+OFFSET = 3 # numero di funzioni di oversampling
+over_sampling_switch = -1
+under_sampling_switch = -1
 
 def start_menu():
-    global switch_value
+    global feature_sel_switch
+    global over_sampling_switch
+    global under_sampling_switch
+
     # Liste delle opzioni per i diversi menù e sotto-menù
     main_options = [" [1] Data Analysis", " [2] Pre-processing", " [3] Classificatori", " [4] Fai il test", " [0] Esci"]
     classifier_options = [" [3.1] kNN (Scikit-learn)", " [3.2] Random Forest(Scikit-learn)", " [3.3] SVM (Scikit-learn)", " [3.4] Naive-Bayes (Custom)", " [3.5] Ensemble (Custom)", " [0] Indietro"]
-    pre_pro_options = [f" [2.1] Feature Selection: {FEATURES_SWITCH[switch_value]}", " [2.2] Undersampling", " [2.3] Oversampling", " [2.4] Standardizzazione", " [0] Indietro"]
-    back_exit_options = [" [0] Indietro", " [1] Esci"]
+    pre_pro_options = [f" [2.1] Feature Selection: {FEATURES_SWITCH[feature_sel_switch]}", " [2.2] Undersampling", " [2.3] Oversampling", " [2.4] Standardizzazione", " [0] Indietro"]
+    back_exit_options = [" [0] Indietro"]
 
     # Istanze dei menù
     mainMenu = TerminalMenu(main_options, title = "MAIN MENU")
@@ -74,30 +84,37 @@ def start_menu():
             while exit_pre_processing_settings == False:
                 pre_processing_index = TerminalMenu(pre_pro_options, title = "PRE-PROCESSING").show()
                 pre_pro_choice = pre_pro_options[pre_processing_index]
+                # feature selection
                 if pre_pro_choice == pre_pro_options[0]:
-                    switch_value = 1 - switch_value
-                    pre_pro_options[0] = f" [a] Feature Selection: {FEATURES_SWITCH[switch_value]}"
+                    feature_sel_switch = 1 - feature_sel_switch
+                    pre_pro_options[0] = f" [a] Feature Selection: {FEATURES_SWITCH[feature_sel_switch]}"
+                # undersampling
                 if pre_pro_choice == pre_pro_options[1]:
-                    plot.plot_undersampling(X, y)
+                    under_sampling_switch = TerminalMenu(UNDER_SAMPLING_LIST, title = "UNDERSAMPLING").show()
+                    under_sampling_switch = under_sampling_switch - 1
+                    if under_sampling_switch != -1:
+                        SAMPLING_FUNCTIONS[under_sampling_switch + OFFSET](df)
+                # oversampling
                 if pre_pro_choice == pre_pro_options[2]:
-                    plot.plot_oversampling(X, y)
+                    over_sampling_switch = TerminalMenu(OVER_SAMPLING_LIST, title = "OVERSAMPLING").show()
+                    over_sampling_switch = over_sampling_switch - 1
+                    if over_sampling_switch != -1:
+                        SAMPLING_FUNCTIONS[over_sampling_switch](df)
+                # standardizzazione
                 if pre_pro_choice == pre_pro_options[3]:
                     uniform_vs_Zstandard.uniform_vs_zstandard(X, y)
+                # indietro
                 if pre_pro_choice == pre_pro_options[4]:
                     exit_pre_processing_settings = True
 
-
         # >>> [3] Classificatori
         if optionsChoice ==  main_options[2]:
-            classifiers_array = []
-            if switch_value == 0:
-                classifiers_array = [knn.KNeighborsClassifier, random_forest.random_forest_classifier, svm.SVM_classifier, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
+            if feature_sel_switch == 0:
+                pass
             else:
                 threshold = 2.0
                 variances = X.var()
                 X_selected = X[variances[variances > threshold].index.tolist()]
-                #classifiers_array = [knn_features.kNN_classifier_with_Feature_Selection, random_forest.random_forest_classifier, svm.SVM_classifier_with_tuning, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
-                #! TO FIX: implement feature selection for all classifiers
                 
             returnToMainMenu = False
             while(returnToMainMenu == False):
@@ -106,40 +123,51 @@ def start_menu():
                 
                 # [a] kNN (Scikit-learn)
                 if classifierChoice == classifier_options[0]:
-                    if switch_value == 0:
-                        # remove this to tune the model yourself
-                        # knn.KNN_classifier_with_tuning(X, y)
+                    if feature_sel_switch == 0:
                         knn.KNN_classifier(X, y)
+                        # rimuovere questo per fare il tuning del modello
+                        # knn.KNN_classifier_with_tuning(X, y)
                     else:
-                        # remove this to calculate yourself the best threshold
-                        threshold, X_selected = feature_selection.better_threshold(X, y, knn.KNN_classifier, k=4)
+                        # rimuovere questo per calcolare la soglia migliore
+                        # threshold, X_selected = feature_selection.better_threshold(X, y, knn.KNN_classifier)
                         knn.KNN_classifier(X_selected, y)
                     
 
                 # [b] Random Forest(Scikit-learn)
                 if classifierChoice == classifier_options[1]:
-                    classifiers_array[1](X, y)
+                    if feature_sel_switch == 0:
+                        random_forest.random_forest_classifier(X, y)
+                        # rimuovere questo per fare il tuning del modello
+                        # random_forest.random_forest_classifier_with_tuning(X, y)
+                    else:
+                        # rimuovere questo per calcolare la soglia migliore
+                        threshold, X_selected = feature_selection.better_threshold(X, y, random_forest.random_forest_classifier)
+                        random_forest.random_forest_classifier(X_selected, y)
 
                 # [c] SVM (Scikit-learn)
                 if classifierChoice == classifier_options[2]:
-                    classifiers_array[2](X, y)
+                    if feature_sel_switch == 0:
+                        svm.SVM_classifier(X, y)
+                        # rimuovere questo per fare il tuning del modello
+                        # svm.SVM_classifier_with_tuning(X, y)
+                    else:
+                        # rimuovere questo per calcolare la soglia migliore
+                        # threshold, X_selected = feature_selection.better_threshold(X, y, SVM_classifier)
+                        svm.SVM_classifier(X_selected, y)
 
-
-                ##### ! TO FIX: SOME MENU LOGIC IS MISSING HERE #####
-                ##### ! TO FIX: SOME MENU LOGIC IS MISSING HERE #####
-                ##### ! TO FIX: SOME MENU LOGIC IS MISSING HERE #####
-                ##### ! TO FIX: SOME MENU LOGIC IS MISSING HERE #####
-                ##### ! TO FIX: SOME MENU LOGIC IS MISSING HERE #####
                 # [d] Naive-Bayes (Custom)
                 if classifierChoice == classifier_options[3]:
-                    classifiers_array[3](X, y)
-                    r = back_exit_menu.show()
-                    if r == 1:
-                        returnToMainMenu = True
+                    if feature_sel_switch == 0:
+                        naive_bayes_custom.Naive_Bayes_Custom(X, y)
+                    else:
+                        naive_bayes_custom.Naive_Bayes_Custom(X_selected, y)
 
                 # [e] Ensemble (Custom)
                 if classifierChoice ==  classifier_options[4]:
-                    classifiers_array[4](X, y)
+                    if feature_sel_switch == 0:
+                        ensambe_custom.ensamble_classifiers(X, y)
+                    else:
+                        ensambe_custom.ensamble_classifiers(X_selected, y)
 
                 # [f] Return to Main Menu
                 if classifierChoice == classifier_options[5]:

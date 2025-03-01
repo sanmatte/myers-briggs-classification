@@ -36,30 +36,30 @@ def SVM_classifier_with_tuning(X, y):
     best_svm = grid_search.best_estimator_
     
     # Predizioni su training e test set
-    y_train_pred = best_svm.predict(X_train_scaled)
+    # y_train_pred = best_svm.predict(X_train_scaled)
     y_test_pred = best_svm.predict(X_test_scaled)
 
     # Valutazione del modello
-    train_accuracy = accuracy_score(y_train, y_train_pred)
+    #train_accuracy = accuracy_score(y_train, y_train_pred)
     test_accuracy = accuracy_score(y_test, y_test_pred)
 
     print("\nSVM Model Performance:")
-    print(f'Accuratezza sul TRAIN: {train_accuracy:.3f}')
+    #print(f'Accuratezza sul TRAIN: {train_accuracy:.3f}')
     print(f'Accuratezza sul TEST: {test_accuracy:.3f}')
     
     print("\nClassification Report:")
     print(classification_report(y_test, y_test_pred))
 
-def SVM_classifier(X, y):
+def SVM_classifier(X, y, C=1, gamma='scale', kernel='rbf'):
 
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
 
-    svm_model = SVC(C=1, gamma='scale', kernel='rbf')
+    svm_model = SVC(C=C, gamma=gamma, kernel=kernel)
     svm_model.fit(X_train, y_train)
 
-    # Predizioni su training e test set
-    y_train_pred = svm_model.predict(X_train)
+    # Predizioni
+    # y_train_pred = svm_model.predict(X_train)
     y_test_pred = svm_model.predict(X_test)
 
     # Valutazione del modello
@@ -72,7 +72,3 @@ def SVM_classifier(X, y):
     
     print("\nClassification Report:")
     print(classification_report(y_test, y_test_pred))
-    
-
-#! Missing without tuning
-#! Missing with feature selection

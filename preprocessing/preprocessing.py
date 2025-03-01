@@ -1,114 +1,122 @@
 from imblearn.under_sampling import RandomUnderSampler, InstanceHardnessThreshold, NearMiss, ClusterCentroids
-from imblearn.over_sampling import RandomOverSampler, SMOTE, ADASYN 
+from imblearn.over_sampling import RandomOverSampler, SMOTE, ADASYN, SMOTENC
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from collections import Counter
 
-#load dataset
-import pandas as pd
-df = pd.read_csv('16P.csv')
 def compute_accuracy(pred_y, test_y):
     return (pred_y == test_y).sum() / len(pred_y)
 
+# oversampling
+def smote(df):
+    # campiona dataset
+    df_sampled = df.sample(frac=0.5, random_state=42)
 
-#sample dataset
-df = df.sample(frac=0.5, random_state=42)
-# Separate features and target
-X = df.drop(columns=['Personality', 'Response Id'], axis=1)  # Adjust if column name is different
-y = df['Personality']
+    X = df_sampled.drop(columns=['Personality', 'Response Id'], axis=1) 
+    y = df_sampled['Personality']
 
-#split con stratificazione
-train_x, test_x, train_y, test_y = train_test_split(X, y, random_state=42, test_size=0.2)
-import utils.plot as plot
-plot.distribution_chart(y)
+    train_x, test_x, train_y, test_y = train_test_split(X, y, random_state=42, test_size=0.2)
+    sm = SMOTE(random_state=42)
+    X_resampled, y_resampled = sm.fit_resample(train_x, train_y)
+    for cls, count in Counter(y_resampled).items():
+        print(f"{cls} : {count}")
 
-# frequenza delle classi
-print('Frequenza delle classi nel dataset originale %s' % sorted(Counter(y).items()))
+    # Knn
+    knn = KNeighborsClassifier(4)
+    knn.fit(X_resampled, y_resampled)
+    pred_y = knn.predict(test_x)
+    print('Accuratezza del knn dopo SMOTE oversampling %s' % compute_accuracy(test_y, pred_y))
+
+def random_over(df):
+    # campiona dataset
+    df_sampled = df.sample(frac=0.5, random_state=42)
+
+    X = df_sampled.drop(columns=['Personality', 'Response Id'], axis=1) 
+    y = df_sampled['Personality']
+
+    train_x, test_x, train_y, test_y = train_test_split(X, y, random_state=42, test_size=0.2)
+    rus = RandomOverSampler(random_state=0)
+    X_resampled, y_resampled = rus.fit_resample(train_x, train_y)
+    for cls, count in Counter(y_resampled).items():
+        print(f"{cls} : {count}")
+
+    # Knn
+    knn = KNeighborsClassifier(4)
+    knn.fit(X_resampled, y_resampled)
+    pred_y = knn.predict(test_x)
+    print('Accuratezza del knn dopo random oversampling %s' % compute_accuracy(test_y, pred_y))
 
 
-dTree_clf = DecisionTreeClassifier(random_state=0)
-dTree_clf.fit(train_x, train_y)
-pred_y = dTree_clf.predict(test_x)
-print('Accuratezza del dtree sul dataset originale %s' % compute_accuracy(test_y, pred_y))
+# undersampling
 
-rus = RandomUnderSampler(random_state=0)
-X_resampled, y_resampled = rus.fit_resample(train_x, train_y)
-print('Dataset dopo il random undersampling %s' % sorted(Counter(y_resampled).items()))  
+def cluster_centroids(df):
+    # campiona dataset
+    df_sampled = df.sample(frac=0.5, random_state=42)
 
-dTree_clf = DecisionTreeClassifier(random_state=0)
-dTree_clf.fit(X_resampled, y_resampled)
-pred_y = dTree_clf.predict(test_x)
-print('Accuratezza del dtree dopo random undersampling %s' % compute_accuracy(test_y, pred_y))
-# from sklearn.preprocessing import LabelEncoder
-# # Converti le classi in numeri
-# le = LabelEncoder()
-# y_numeric = le.fit_transform(y)
+    X = df_sampled.drop(columns=['Personality', 'Response Id'], axis=1) 
+    y = df_sampled['Personality']
 
-# # Ora usa y_numeric invece di y
-# iht = InstanceHardnessThreshold()
-# X_resampled, y_resampled = iht.fit_resample(X, y_numeric)
+    train_x, test_x, train_y, test_y = train_test_split(X, y, random_state=42, test_size=0.2)
+    cc = ClusterCentroids(random_state=42)
+    X_resampled, y_resampled = cc.fit_resample(train_x, train_y)
+    for cls, count in Counter(y_resampled).items():
+        print(f"{cls} : {count}")
 
-# # Se vuoi riconvertire i numeri in etichette originali dopo il resampling:
-# y_resampled = le.inverse_transform(y_resampled)
-# print('Dataset dopo il probabilistico undersampling %s' % sorted(Counter(y_resampled).items()))  
+    # Knn
+    knn = KNeighborsClassifier(4)
+    knn.fit(X_resampled, y_resampled)
+    pred_y = knn.predict(test_x)
+    print('Accuratezza del knn dopo cluster centroids %s' % compute_accuracy(test_y, pred_y))
 
-# dTree_clf = DecisionTreeClassifier(random_state=0)
-# dTree_clf.fit(X_resampled, y_resampled)
-# pred_y = dTree_clf.predict(test_x)
-# print('Accuratezza del dtree dopo probabilistico undersampling %s' % compute_accuracy(test_y, pred_y))
-#y_resampled = le.inverse_transform(y_resampled)
-#X_resampled, y_resampled = rus.fit_resample(train_x, train_y)
-# nm = NearMiss(version=1)
-# X_resampled, y_resampled = nm.fit_resample(X, y)
-# print('Dataset dopo il NearMiss_v1 undersampling %s' % sorted(Counter(y_resampled).items()))
+def random_under(df):
+    # campiona dataset
+    df_sampled = df.sample(frac=0.5, random_state=42)
 
-# dTree_clf = DecisionTreeClassifier(random_state=0)
-# dTree_clf.fit(X_resampled, y_resampled)
-# pred_y = dTree_clf.predict(test_x)
-# print('Accuratezza del dtree dopo NearMiss_v1 undersampling %s' % compute_accuracy(test_y, pred_y))
+    X = df_sampled.drop(columns=['Personality', 'Response Id'], axis=1) 
+    y = df_sampled['Personality']
 
-# nm = NearMiss(version=2)
-# X_resampled, y_resampled = nm.fit_resample(X, y)
-# print('Dataset dopo il NearMiss_v2 undersampling %s' % sorted(Counter(y_resampled).items()))
+    train_x, test_x, train_y, test_y = train_test_split(X, y, random_state=42, test_size=0.2)
+    rus = RandomUnderSampler(random_state=0)
+    X_resampled, y_resampled = rus.fit_resample(train_x, train_y)
+    for cls, count in Counter(y_resampled).items():
+        print(f"{cls} : {count}")
 
-# dTree_clf = DecisionTreeClassifier(random_state=0)
-# dTree_clf.fit(X_resampled, y_resampled)
-# pred_y = dTree_clf.predict(test_x)
-# print('Accuratezza del dtree dopo NearMiss_v2 undersampling %s' % compute_accuracy(test_y, pred_y))
+    # Knn
+    knn = KNeighborsClassifier(4)
+    knn.fit(X_resampled, y_resampled)
+    pred_y = knn.predict(test_x)
+    print('Accuratezza del knn dopo random undersampling %s' % compute_accuracy(test_y, pred_y))
 
-cc = ClusterCentroids(random_state=0)
-X_resampled, y_resampled = cc.fit_resample(X, y)
-print('Dataset dopo il kMeans undersampling %s' % sorted(Counter(y_resampled).items()))
 
-dTree_clf = DecisionTreeClassifier(random_state=0)
-dTree_clf.fit(X_resampled, y_resampled)
-pred_y = dTree_clf.predict(test_x)
-print('Accuratezza del dtree dopo kMeans undersampling %s' % compute_accuracy(test_y, pred_y))
+# combinazione di tecniche di resampling
 
-rus = RandomOverSampler(random_state=0)
-X_resampled, y_resampled = rus.fit_resample(train_x, train_y)
-print('Dataset dopo il random oversampling %s' % sorted(Counter(y_resampled).items()))  
+def hybrid_resampling(df):
+    # Campiona dataset
+    df_sampled = df.sample(frac=0.5, random_state=42)
 
-dTree_clf = DecisionTreeClassifier(random_state=0)
-dTree_clf.fit(X_resampled, y_resampled)
-pred_y = dTree_clf.predict(test_x)
-print('Accuratezza del dtree dopo random oversampling %s' % compute_accuracy(test_y, pred_y))
+    X = df_sampled.drop(columns=['Personality', 'Response Id'], axis=1) 
+    y = df_sampled['Personality']
 
-sm = SMOTE(random_state=42)
-X_resampled, y_resampled = sm.fit_resample(X, y)
-print('Dataset dopo SMOTE oversampling %s' % sorted(Counter(y_resampled).items()))
+    # Split into train and test sets
+    train_x, test_x, train_y, test_y = train_test_split(X, y, random_state=42, test_size=0.2)
 
-dTree_clf = DecisionTreeClassifier(random_state=0)
-dTree_clf.fit(X_resampled, y_resampled)
-pred_y = dTree_clf.predict(test_x)
-print('Accuratezza del dtree dopo SMOTE oversampling %s' % compute_accuracy(test_y, pred_y))
+    # Apply undersampling (Cluster Centroids) first
+    cc = ClusterCentroids(random_state=42)
+    X_under, y_under = cc.fit_resample(train_x, train_y)
+    for cls, count in Counter(y_under).items():
+        print(f"{cls} : {count}")
 
-# ada = ADASYN(random_state=42)
-# X_resampled, y_resampled = ada.fit_resample(X, y)
-# print('Dataset dopo ADASYN oversampling %s' % sorted(Counter(y_resampled).items()))
+    # Apply oversampling (SMOTE-NC) to balance minority classes
+    smote = SMOTE(random_state=42)
+    X_resampled, y_resampled = smote.fit_resample(X_under, y_under)
+    for cls, count in Counter(y_resampled).items():
+        print(f"{cls} : {count}")
 
-# dTree_clf = DecisionTreeClassifier(random_state=0)
-# dTree_clf.fit(X_resampled, y_resampled)
-# pred_y = dTree_clf.predict(test_x)
-# print('Accuratezza del dtree dopo ADASYN oversampling %s' % compute_accuracy(test_y, pred_y))
+    # Train kNN model
+    knn = KNeighborsClassifier(4)
+    knn.fit(X_resampled, y_resampled)
+    pred_y = knn.predict(test_x)
+
+    # Print accuracy
+    print('Accuratezza del kNN dopo Hybrid Resampling %s' % compute_accuracy(test_y, pred_y))

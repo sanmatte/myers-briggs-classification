@@ -34,14 +34,17 @@ def KNN_classifier_with_tuning(X, y):
     for n_neighbors in neighbor_number:
         print(f"Neighbors: {n_neighbors}")
         
-        train_acc, test_acc = KNN_classifier(X_standardized, y, n_neighbors)
+        # train_acc, test_acc = KNN_classifier(X_standardized, y, n_neighbors)
+        test_acc = KNN_classifier(X_standardized, y, n_neighbors)
 
-        print([train_acc, test_acc])
+        # print([train_acc, test_acc])
 
         # Calcola la media delle accuratezze per ogni valore di k
-        training_accuracy.append(train_acc)
+        #training_accuracy.append(train_acc)
         test_accuracy.append(test_acc)
+        print("Accuracy",test_acc)
+        
 
     # stampa il plot
-    plot.trainingAccuracy_vs_testAccuracy_chart(neighbor_number, neighbor_number, training_accuracy, test_accuracy, "Training Accuracy", "Test Accuracy", "Number of Neighbors", "Accuracy", "Tuning KNN")
+    # plot.trainingAccuracy_vs_testAccuracy_chart(neighbor_number, neighbor_number, training_accuracy, test_accuracy, "Training Accuracy", "Test Accuracy", "Number of Neighbors", "Accuracy", "Tuning KNN")
 

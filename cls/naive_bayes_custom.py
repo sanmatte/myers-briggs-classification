@@ -139,7 +139,7 @@ def Naive_Bayes_Custom(X, y):
     sub_end = timer()
     print(f"{(sub_end - sub_start):.2f}, seconds")
 
-    train_accuracy = "Not Calculated to reduce complexity time"
+    # train_accuracy = "[Not Calculated to reduce complexity time]"
     # train_accuracy = predict(X_train, y_train, class_probs, entire_probability)
     test_accuracy = predict(X_test, y_test, class_probs, entire_probability)
     end = timer()
@@ -148,6 +148,8 @@ def Naive_Bayes_Custom(X, y):
     ctime, metric = [ctime, "seconds"] if ctime < 120 else [ctime/60, "minutes"]
     print(f"Done: {ctime:.2f}, {metric}\n")
     
-    print(f"Train Accuracy: {train_accuracy}")
+    # print(f"Train Accuracy: {train_accuracy}")
     print(f"Test Accuracy: {test_accuracy}")
-    return train_accuracy, test_accuracy
+
+    #return train_accuracy, test_accuracy
+    return test_accuracy
