@@ -6,6 +6,7 @@ import random_forest
 import naive_bayes_custom
 import svm
 import decision_tree
+import uniform_vs_Zstandard
 from copy import deepcopy
 import ensambe_custom
 import pandas as pd
@@ -42,7 +43,7 @@ def start_menu():
     # Liste delle opzioni per i diversi menù e sotto-menù
     main_options = [" [1] Data Analysis", " [2] Pre-processing", " [3] Classificatori", " [4] Fai il test", " [0] Esci"]
     classifier_options = [" [3.1] kNN (Scikit-learn)", " [3.2] Random Forest(Scikit-learn)", " [3.3] SVM (Scikit-learn)", " [3.4] Naive-Bayes (Custom)", " [3.5] Ensemble (Custom)", " [0] Indietro"]
-    pre_pro_options = [f" [2.1] Feature Selection: {FEATURES_SWITCH[switch_value]}", " [2.2] Undersampling", " [2.3] Oversampling", " [0] Indietro"]
+    pre_pro_options = [f" [2.1] Feature Selection: {FEATURES_SWITCH[switch_value]}", " [2.2] Undersampling", " [2.3] Oversampling", " [2.4] Standardizzazione", " [0] Indietro"]
     back_exit_options = [" [0] Indietro", " [1] Esci"]
 
     # Istanze dei menù
@@ -76,6 +77,8 @@ def start_menu():
                 if pre_pro_choice == pre_pro_options[2]:
                     plot.plot_oversampling(X, y)
                 if pre_pro_choice == pre_pro_options[3]:
+                    uniform_vs_Zstandard.uniform_vs_zstandard(X, y)
+                if pre_pro_choice == pre_pro_options[4]:
                     exit_pre_processing_settings = True
 
 

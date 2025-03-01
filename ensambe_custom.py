@@ -64,7 +64,7 @@ def ensamble_classifiers(X, y):
     dTree_clf = DecisionTreeClassifier(random_state=0)
     gNB_clf = GaussianNB()
     #notare che in questo caso i classificatori sono forniti come lista semplice
-    e2_clf = Ensemble(estimators=[ kNN_clf, dTree_clf, gNB_clf], voting='hard', w=[4, 1, 1])
+    e2_clf = Ensemble(estimators=[ kNN_clf, dTree_clf, gNB_clf], voting='soft', w=[1, 1, 1])
     e2_clf.fit(train_x, train_y, labels)
     pred_test_y = e2_clf.predict(test_x)
     print("Accuracy: ", accuracy_score(test_y, pred_test_y))

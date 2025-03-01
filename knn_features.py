@@ -2,9 +2,6 @@
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, classification_report
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import KFold
-import plot
 
 
 def kNN_classifier_with_Feature_Selection(X, y):
