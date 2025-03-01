@@ -21,11 +21,13 @@ def better_threshold(X, y, classifier, **params):
     """
     # Calcola la varianza di ogni colonna
     variances = X.var()
+    print(variances)
+    print(type(variances))
     mediana = variances.median()
     print(f'Mediana delle varianze: {mediana}')
 
     # Valori di soglia più significativi
-    thresholds = [0.134 ,2.000, 2.100, 2.199]
+    thresholds = [0.134, 0.1364, 0.1365 ,2.000, 2.100, 2.199]
     best_accuracy = 0
     best_threshold = 0
     for threshold in thresholds:

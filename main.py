@@ -23,10 +23,11 @@ def data_analysis(X):
     tmp_X = deepcopy(X)
     qq = ['Q'+str(i) for i in range(1,len(tmp_X.columns)+1)]
     tmp_X.columns = qq
-    print(tmp_X.corr())
+    corr_method = "kendall"
+    print(tmp_X.corr(method = corr_method))
 
     # Se vuoi visualizzare il plot della matrice di correlazione, scommenta questa riga
-    plot.correlation_matrix_chart(tmp_X)
+    plot.correlation_matrix_chart(tmp_X, corr_method)
 
     # Fornisce delle STATISTICHE GENERALI riguardo il dataset
     print('\n------------------------------------------------------------------------------------------------------------------------------------')
@@ -90,7 +91,7 @@ def start_menu():
         if optionsChoice ==  main_options[2]:
             classifiers_array = []
             if switch_value == 0:
-                classifiers_array = [knn.KNN_classifier_with_tuning, random_forest.random_forest_classifier, svm.SVM_classifier_with_tuning, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
+                classifiers_array = [knn.KNeighborsClassifier, random_forest.random_forest_classifier, svm.SVM_classifier, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
             else:
                 threshold = 2.0
                 variances = X.var()
