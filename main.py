@@ -86,7 +86,7 @@ def start_menu():
         if optionsChoice ==  main_options[2]:
             classifiers_array = []
             if switch_value == 0:
-                classifiers_array = [knn.KNN_classifier_with_tuning, random_forest.random_forest_classifier, svm.SVM_classifier_with_tuning, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
+                classifiers_array = [knn.KNeighborsClassifier, random_forest.random_forest_classifier, svm.SVM_classifier, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
             else:
                 classifiers_array = [knn_features.kNN_classifier_with_Feature_Selection, random_forest.random_forest_classifier, svm.SVM_classifier_with_tuning, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
                 #! TO FIX: implement feature selection for all classifiers
@@ -98,7 +98,7 @@ def start_menu():
                 
                 # [a] kNN (Scikit-learn)
                 if classifierChoice == classifier_options[0]:
-                    classifiers_array[0](X, y)
+                    classifiers_array[0](X, y, 4)
 
                 # [b] Random Forest(Scikit-learn)
                 if classifierChoice == classifier_options[1]:

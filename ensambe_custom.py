@@ -4,6 +4,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
 
 def majority_voting(label, proba, voting, w=None):
     if voting == "hard":    #Hard voting
@@ -60,11 +62,12 @@ def ensamble_classifiers(X, y):
     train_x, test_x, train_y, test_y = train_test_split(X, y, test_size=0.20, stratify=y)
     print('Shape training set:', train_x.shape)
     print('Shape validation set:', test_x.shape)
-    kNN_clf = KNeighborsClassifier(1)
-    dTree_clf = DecisionTreeClassifier(random_state=0)
+    kNN_clf = KNeighborsClassifier(4)
+    dTree_clf = DecisionTreeClassifier(random_state=42, max_depth=13)
     gNB_clf = GaussianNB()
     #notare che in questo caso i classificatori sono forniti come lista semplice
-    e2_clf = Ensemble(estimators=[ kNN_clf, dTree_clf, gNB_clf], voting='soft', w=[1, 1, 1])
-    e2_clf.fit(train_x, train_y, labels)
-    pred_test_y = e2_clf.predict(test_x)
+    e_clf = Ensemble(estimators=[ kNN_clf, dTree_clf, gNB_clf], voting='hard', w=[1, 1, 1])
+    e_clf.fit(train_x, train_y, labels)
+    pred_test_y = e_clf.predict(test_x)
     print("Accuracy: ", accuracy_score(test_y, pred_test_y))
+    return accuracy_score(test_y, pred_test_y)

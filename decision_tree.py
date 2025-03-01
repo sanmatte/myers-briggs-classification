@@ -3,10 +3,14 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.preprocessing import StandardScaler
 
 def DecisionTree(X, y, depth):
     # Split del dataset in training e test set
-    train_x, test_x, train_y, test_y = train_test_split(X, y, random_state = 42, test_size = 0.2)
+    scaler = StandardScaler()
+    X_standardized = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+    
+    train_x, test_x, train_y, test_y = train_test_split(X_standardized, y, random_state = 42, test_size = 0.2)
 
     # Creazione del DecisionTreeClassifier 
     dTree_clf = DecisionTreeClassifier(criterion="gini", max_depth = depth)
@@ -18,8 +22,10 @@ def DecisionTree(X, y, depth):
     score_train = dTree_clf.score(train_x, train_y) # accuracy training
     score_test = dTree_clf.score(test_x, test_y)    # generalization training
 
-    # Ritorna le accuracy in fase di training e test
-    return score_train, score_test
+    # Stampa l'accuracy in fase di training e test
+    print(f"Accuracy in fase di training: {score_train}")
+    print(f"Accuracy in fase di test: {score_test}")
+
 
 
 def DecisionTree_with_tuning(X, y):
@@ -156,3 +162,4 @@ def DecisionTree_with_tuning(X, y):
         print(f"Accuracy in fase di training: {score_train}\n")
 
     # Stampa l'acuratezza migliore in seguito al TUNING degli Iperparametri (max-depth)
+

@@ -32,8 +32,8 @@ def kNN_classifier_with_Feature_Selection(X, y):
     print(f'Accuratezza sul TEST: {test_accuracy: }\n')
 
     # Valori di soglia più significativi
-    thresholds = [2.000, 2.100, 2.159, 2.199]
-
+    thresholds = [1.800, 1.900, 2.000, 2.100, 2.159, 2.199]
+    accuracies = []
     for threshold in thresholds:
         # ----------------   KNN with FEATURE SELECTION  ----------------
 
@@ -53,6 +53,9 @@ def kNN_classifier_with_Feature_Selection(X, y):
         y_train_pred = knn.predict(X_train)
         y_test_pred = knn.predict(X_test)
 
+        test_accuracy = accuracy_score(y_test, y_test_pred)
+        accuracies.append(test_accuracy)
+
         # Calcola l'accuratezza
         feature_train_accuracy = classification_report(y_train, y_train_pred)
         feature_test_accuracy = classification_report(y_test, y_test_pred)
@@ -61,6 +64,21 @@ def kNN_classifier_with_Feature_Selection(X, y):
         print(f"KNN Report:")
         print(f'Metriche sul TRAIN:\n{feature_train_accuracy}')
         print(f'Metriche sul TEST:\n{feature_test_accuracy}\n')
-    
+
+    import matplotlib.pyplot as plt
+
+    # Creazione del grafico
+    plt.figure(figsize=(8, 5))
+    plt.plot(thresholds, accuracies, marker='o', linestyle='-', color='b', label="Test Accuracy")
+
+    # Aggiunta etichette
+    plt.xlabel("Threshold")
+    plt.ylabel("Accuracy")
+    plt.title("Accuracy vs Threshold in kNN Feature Selection")
+    plt.grid(True)
+    plt.legend()
+
+    # Mostra il plot
+    plt.show()
 
 

@@ -5,6 +5,7 @@ from sklearn.neighbors import KNeighborsClassifier
 import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 import numpy as np
+from sklearn.preprocessing import StandardScaler
 
 def KNN_classifier(X, y, k):
     train_x, test_x, train_y, test_y = train_test_split(X, y, random_state = 42, test_size = 0.2)
@@ -14,16 +15,18 @@ def KNN_classifier(X, y, k):
     clf.fit(train_x, train_y)
 
     # calcola l'accuratezza in fase di training e test 
-    train_acc = clf.score(train_x, train_y)
     test_acc = clf.score(test_x, test_y)
-
-    return train_acc, test_acc
+    print(f"Test Accuracy: {test_acc}")
+    return test_acc
 
 
 def KNN_classifier_with_tuning(X, y):
     # range di valori per l'iperparametro n_neighbors
     neighbor_number = range(1, 6)
     
+    scaler = StandardScaler()
+    X_standardized = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+
     # liste che memorizzano le accuratezze dei diversi modelli, addestrati, al variare dell'iperparametro n_neighbors
     training_accuracy = []
     test_accuracy = []
@@ -31,7 +34,7 @@ def KNN_classifier_with_tuning(X, y):
     for n_neighbors in neighbor_number:
         print(f"Neighbors: {n_neighbors}")
         
-        train_acc, test_acc = KNN_classifier(X, y, n_neighbors)
+        train_acc, test_acc = KNN_classifier(X_standardized, y, n_neighbors)
 
         print([train_acc, test_acc])
 
