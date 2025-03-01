@@ -20,7 +20,7 @@ y = df['Personality']
 
 #split con stratificazione
 train_x, test_x, train_y, test_y = train_test_split(X, y, random_state=42, test_size=0.2)
-import plot
+import utils.plot as plot
 plot.distribution_chart(y)
 
 # frequenza delle classi

@@ -1,12 +1,12 @@
 import pandas as pd
-import plot
+import utils.plot as plot
 import numpy as np
-import svm
-import random_forest
-import knn
-import naive_bayes_custom
-import ensambe_custom
-import decision_tree
+import cls.svm as svm
+import cls.random_forest as random_forest
+import cls.knn as knn
+import cls.naive_bayes_custom as naive_bayes_custom
+import cls.ensambe_custom as ensambe_custom
+import utils.decision_tree as decision_tree
 from sklearn.preprocessing import StandardScaler
 
 def uniform_vs_zstandard(X, y):

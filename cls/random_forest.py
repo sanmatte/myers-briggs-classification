@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
-import plot
+import utils.plot as plot
 
 def random_forest_classifier(X, y):
     # Dividi il dataset in train e test set

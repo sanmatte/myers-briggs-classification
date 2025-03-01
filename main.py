@@ -1,14 +1,14 @@
-import ourTest
-import plot
-import knn
-import knn_features
-import random_forest
-import naive_bayes_custom
-import svm
-import decision_tree
-import uniform_vs_Zstandard
+import test.ourTest as ourTest
+import utils.plot as plot
+import cls.knn as knn
+import preprocessing.feature_selection as feature_selection
+import cls.random_forest as random_forest
+import cls.naive_bayes_custom as naive_bayes_custom
+import cls.svm as svm
+import utils.decision_tree as decision_tree
+import utils.uniform_vs_Zstandard as uniform_vs_Zstandard
 from copy import deepcopy
-import ensambe_custom
+import cls.ensambe_custom as ensambe_custom
 import pandas as pd
 import numpy as np
 from simple_term_menu import TerminalMenu
@@ -112,7 +112,7 @@ def start_menu():
                         knn.KNN_classifier(X, y)
                     else:
                         # remove this to calculate yourself the best threshold
-                        threshold, X_selected = knn_features.better_threshold(X, y, knn.KNN_classifier, k=4)
+                        threshold, X_selected = feature_selection.better_threshold(X, y, knn.KNN_classifier, k=4)
                         knn.KNN_classifier(X_selected, y)
                     
 
