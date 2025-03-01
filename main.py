@@ -13,16 +13,20 @@ import pandas as pd
 import numpy as np
 from simple_term_menu import TerminalMenu
 
-def data_analysis(df):
+def data_analysis(X):
     
      # Calcola e stampa la MATRICE di CORRELAZIONE
     print('\n------------------------------------------------------------------------------------------------------------------------------------')
     print('\nMATRICE di CORRELAZIONE\n')
-    # Rinomina le intestazioni delle domande con un identificativo progessivo Q# al posto della domanda intera
-    tmp_df = deepcopy(df)
-    qq = ['Q'+str(i) for i in range(1,len(tmp_df.columns)+1)]
-    tmp_df.columns = qq
-    print(tmp_df.corr().T)
+    
+    # Rinomina le intestazioni delle domande con un identificativo progessivo Q# al posto dell' intera domanda per una maggiore leggibilità
+    tmp_X = deepcopy(X)
+    qq = ['Q'+str(i) for i in range(1,len(tmp_X.columns)+1)]
+    tmp_X.columns = qq
+    print(tmp_X.corr())
+
+    # Se vuoi visualizzare il plot della matrice di correlazione, scommenta questa riga
+    plot.correlation_matrix_chart(tmp_X)
 
     # Fornisce delle STATISTICHE GENERALI riguardo il dataset
     print('\n------------------------------------------------------------------------------------------------------------------------------------')
@@ -61,7 +65,7 @@ def start_menu():
 
         # >>> [1] Data Analysis
         if optionsChoice == main_options[0]:
-            data_analysis(df)
+            data_analysis(X)
 
         # >>> [2] Pre-processing
         if optionsChoice ==  main_options[1]:
@@ -98,6 +102,8 @@ def start_menu():
                 
                 # [a] kNN (Scikit-learn)
                 if classifierChoice == classifier_options[0]:
+                    # for tuning run the following
+                    # hparam = knn_with_tuning()
                     classifiers_array[0](X, y)
 
                 # [b] Random Forest(Scikit-learn)
@@ -152,3 +158,4 @@ if __name__ == "__main__":
 
     # Menu Principale di scelta
     start_menu()
+    

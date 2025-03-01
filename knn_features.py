@@ -13,7 +13,7 @@ def kNN_classifier_with_Feature_Selection(X, y):
 
     # ----------------   KNN with ALL features  ----------------
     # Dividi il dataset in train e test set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.50, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
 
     # Addestra il modello KNN
     knn = KNeighborsClassifier(n_neighbors=4)
@@ -43,7 +43,7 @@ def kNN_classifier_with_Feature_Selection(X, y):
         print(f'N° Colonne selezionate: {len(selected_columns)}')
 
         # Dividi il dataset in training e test set (con le colonne selezionate)
-        X_train, X_test, y_train, y_test = train_test_split(X_selected, y, test_size=0.25, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(X_selected, y, test_size=0.20, random_state=42)
 
         # Addestra il modello KNN con le feature selezionate
         knn = KNeighborsClassifier(n_neighbors=4)

@@ -1,5 +1,20 @@
 import matplotlib.pyplot as mpl
-from tabulate import tabulate
+import seaborn as sns
+
+# Mostra la matrice di correlazione fra le diverse domande
+
+def correlation_matrix_chart(df):
+
+    # Calcolo della matrice di correlazione
+    correlation_matrix = df.corr()
+
+    # Creazione della figura
+    mpl.figure(figsize=(8, 7))
+    sns.heatmap(correlation_matrix, cmap="coolwarm", annot=False, fmt=".2f", linewidths=0.5)
+
+    # Mostra il grafico
+    mpl.title("Matrice di Correlazione", fontsize = 18)
+    mpl.show()
 
 # Mostra la distribuzione del dataset - Evidenzia la distribuzione ≈ Uniforme
 def distribution_chart(df):
