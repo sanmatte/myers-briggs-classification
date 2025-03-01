@@ -92,13 +92,3 @@ def Naive_Bayes_Custom(X, y):
     
     accuracy = np.mean(y_pred == y_test)
     print(f"Accuracy: {accuracy}")
-    from sklearn.metrics import classification_report
-    # TODO: EVALUATE THIS
-    print(classification_report(y_test, y_pred))
-    # TODO: LOG LOSS
-    # from sklearn.metrics import log_loss
-    # loss = log_loss(y_test, y_pred_proba)  # Use probability predictions, not labels
-    # print(f"Log Loss: {loss:.4f}")
-
-
-#! Missing with feature selection

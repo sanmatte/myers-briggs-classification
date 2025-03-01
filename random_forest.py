@@ -37,12 +37,12 @@ def random_forest_classifier_with_tuning(X, y):
     print("Best CV Accuracy:", grid_search.best_score_)
 
 
-def random_forest_classifier(X, y):
+def random_forest_classifier(X, y, n_estimators=200, max_depth=16, min_samples_split=2, min_samples_leaf=1):
     # Dividi il dataset in train e test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
     # Definisci il modello Random Forest con iperparametri fissi (scelti tramite tuning)
-    rf = RandomForestClassifier(random_state=42, n_estimators=200, max_depth=16, min_samples_split=2, min_samples_leaf=1)
+    rf = RandomForestClassifier(random_state=42, n_estimators=n_estimators, max_depth=max_depth, min_samples_split=min_samples_split, min_samples_leaf=min_samples_leaf)
     rf.fit(X_train, y_train)
 
     # Effettua le predizioni
@@ -51,5 +51,3 @@ def random_forest_classifier(X, y):
     # Calcola l'accuratezza
     accuracy = accuracy_score(y_test, y_pred)
     print(f"Random Forest Accuracy: {accuracy:.4f}")
-
-#! Feature Selection Missing

@@ -92,6 +92,9 @@ def start_menu():
             if switch_value == 0:
                 classifiers_array = [knn.KNN_classifier_with_tuning, random_forest.random_forest_classifier, svm.SVM_classifier_with_tuning, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
             else:
+                threshold = 2.0
+                variances = X.var()
+                X_selected = X[variances[variances > threshold].index.tolist()]
                 classifiers_array = [knn_features.kNN_classifier_with_Feature_Selection, random_forest.random_forest_classifier, svm.SVM_classifier_with_tuning, naive_bayes_custom.Naive_Bayes_Custom, ensambe_custom.ensamble_classifiers]
                 #! TO FIX: implement feature selection for all classifiers
                 
@@ -102,9 +105,15 @@ def start_menu():
                 
                 # [a] kNN (Scikit-learn)
                 if classifierChoice == classifier_options[0]:
-                    # for tuning run the following
-                    # hparam = knn_with_tuning()
-                    classifiers_array[0](X, y)
+                    if switch_value == 0:
+                        # remove this to tune the model yourself
+                        # knn.KNN_classifier_with_tuning(X, y)
+                        knn.KNN_classifier(X, y)
+                    else:
+                        # remove this to calculate yourself the best threshold
+                        # threshold, X_selected = knn_features.better_threshold(X, y, knn.KNN_classifier, k=4)
+                        knn.KNN_classifier(X_selected, y)
+                    
 
                 # [b] Random Forest(Scikit-learn)
                 if classifierChoice == classifier_options[1]:

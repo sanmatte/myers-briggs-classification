@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 import numpy as np
 
-def KNN_classifier(X, y, k):
+def KNN_classifier(X, y, k=4):
     train_x, test_x, train_y, test_y = train_test_split(X, y, random_state = 42, test_size = 0.2)
 
     # crea e addestra il classificatore KNeighborsClassifier
