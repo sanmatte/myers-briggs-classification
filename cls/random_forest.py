@@ -1,31 +1,31 @@
-import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
-from sklearn.preprocessing import StandardScaler
-import utils.plot as plot
 
 def random_forest_classifier(X, y, n_estimators=200, max_depth=16, min_samples_split=2, min_samples_leaf=1):
-    # Dividi il dataset in train e test set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
-    # plot.distribution_chart(y_train)
-    # Definisci il modello Random Forest con iperparametri fissi (scelti tramite tuning)
+    # Divide il dataset in train e test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
+
+    # Definire e Trainare il modello con iperparametri fissi (scelti tramite tuning)
     rf = RandomForestClassifier(random_state=42, n_estimators=n_estimators, max_depth=max_depth, min_samples_split=min_samples_split, min_samples_leaf=min_samples_leaf)
     rf.fit(X_train, y_train)
 
-    # Effettua le predizioni
-    y_pred = rf.predict(X_test)
+    # Predizioni
+    #y_train_pred = rf.predict(X_train)
+    y_test_pred = rf.predict(X_test)
 
-    # Calcola l'accuratezza
-    accuracy = accuracy_score(y_test, y_pred)
-    print(f"Random Forest Accuracy: {accuracy:.4f}")
-    return accuracy
+    # Valutazione del modello - Calcola 'Accuracy on training set' e 'Accuracy on test set'
+    train_accuracy = 0
+    #train_accuracy = accuracy_score(y_train, y_train_pred)
+    test_accuracy = accuracy_score(y_test, y_test_pred)
+
+    # return 'Training Accuracy' e 'Test Accuracy'
+    return test_accuracy, train_accuracy
 
 
 def random_forest_classifier_with_tuning(X, y):
-    # Dividi il dataset in train e test set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+    # Divide il dataset in train e test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
 
     # Definisci i parametri da testare come iperparametri
     param_grid = {
@@ -35,7 +35,7 @@ def random_forest_classifier_with_tuning(X, y):
         'min_samples_leaf': list(map(int, list(range(1, 5)))) # [1, 2, 3, 4]
     }
 
-    # Definisci il modello Random Forest
+    # Crea e addestra un RandomForestClf clf con iperparametri = n_neighbors
     rf = RandomForestClassifier(random_state=42)
 
     # Cerca i migliori iperparametri e addestra il modello con essi
@@ -44,12 +44,16 @@ def random_forest_classifier_with_tuning(X, y):
 
     # Ottieni il miglior modello
     best_rf = grid_search.best_estimator_
+    
+    # Predizioni
+    #y_train_pred = best_rf.predict(X_train)
+    y_test_pred = best_rf.predict(X_test)
 
-    # Effettua le predizioni
-    y_pred = best_rf.predict(X_test)
+    # Valutazione del modello - Calcola 'Accuracy on training set' e 'Accuracy on test set'
+    train_accuracy = 0
+    #train_accuracy = accuracy_score(y_train, y_train_pred)
+    test_accuracy = accuracy_score(y_test, y_test_pred)
 
-    # Calcola l'accuratezza
-    accuracy = accuracy_score(y_test, y_pred)
-    print(f"Best Random Forest Accuracy: {accuracy:.4f}")
+    print(f"Best Random Forest Accuracy: {test_accuracy}")
     print("Best Parameters:", grid_search.best_params_)
     print("Best CV Accuracy:", grid_search.best_score_)

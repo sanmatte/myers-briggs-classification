@@ -44,17 +44,18 @@ def SVM_classifier_with_tuning(X, y):
     test_accuracy = accuracy_score(y_test, y_test_pred)
 
     print("\nSVM Model Performance:")
-    #print(f'Accuratezza sul TRAIN: {train_accuracy:.3f}')
-    print(f'Accuratezza sul TEST: {test_accuracy:.3f}')
+    #print(f'Accuratezza sul TRAIN: {train_accuracy}')
+    print(f'Accuratezza sul TEST: {test_accuracy}')
     
     print("\nClassification Report:")
     print(classification_report(y_test, y_test_pred))
 
 def SVM_classifier(X, y, C=1, gamma='scale', kernel='rbf'):
 
-
+    # Divide il dataset in train e test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
 
+    # Training del modello ...
     svm_model = SVC(C=C, gamma=gamma, kernel=kernel)
     svm_model.fit(X_train, y_train)
 
@@ -62,13 +63,14 @@ def SVM_classifier(X, y, C=1, gamma='scale', kernel='rbf'):
     # y_train_pred = svm_model.predict(X_train)
     y_test_pred = svm_model.predict(X_test)
 
-    # Valutazione del modello
+    # Valutazione del modello - Calcola 'Accuracy on training set' e 'Accuracy on test set'
+    # train_accuracy = accuracy_score(y_train, y_train_pred)
     test_accuracy = accuracy_score(y_test, y_test_pred)
 
-    # return test_accuracy
+    # return 'Training Accuracy' e 'Test Accuracy'
     print("\nSVM Model Performance:")
-    # print(f'Accuratezza sul TRAIN: {train_accuracy:.3f}')
-    print(f'Accuratezza sul TEST: {test_accuracy:.3f}')
+    # print(f'Accuratezza sul TRAIN: {train_accuracy}')
+    print(f'Accuratezza sul TEST: {test_accuracy}')
     
     print("\nClassification Report:")
     print(classification_report(y_test, y_test_pred))

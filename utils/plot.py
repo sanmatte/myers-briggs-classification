@@ -4,6 +4,23 @@ import seaborn as sns
 from plotly.offline import iplot
 import plotly.express as px
 import pandas as pd
+from tabulate import tabulate
+
+# Funzione per formattare le metriche nei classificatori
+def print_metrics(clf_name, test_accuracy, train_accuracy = 'NP'):
+    
+    table = [
+        ["Train Accuracy", f"{train_accuracy*100:.5f}%" if train_accuracy != 'NP' else 'NP'],
+        ["Test Accuracy", f"{test_accuracy*100:.5f}%"],
+    ]
+
+    # Definiamo l'header
+    header = [f'Metriche di', clf_name]
+
+    # Stampiamo la tabella
+    print(tabulate(table, headers=header, tablefmt="grid"))
+    print()
+
 
 # Mostra la matrice di correlazione fra le diverse domande
 def correlation_matrix_chart(X, corr_method):
@@ -18,9 +35,6 @@ def correlation_matrix_chart(X, corr_method):
     # Mostra il grafico
     mpl.title(f"Matrice di Correlazione - Coefficiente di correlazione: {corr_method}", fontsize = 18)
     mpl.show()
-
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 def plot_likert(X):
 

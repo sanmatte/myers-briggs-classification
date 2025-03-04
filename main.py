@@ -28,7 +28,7 @@ def data_analysis(X):
     print(tmp_X.corr(method = corr_method))
 
     # Se vuoi visualizzare il plot della matrice di correlazione, scommenta questa riga
-    plot.correlation_matrix_chart(tmp_X, corr_method)
+    # plot.correlation_matrix_chart(tmp_X, corr_method)
 
     # Fornisce delle STATISTICHE GENERALI riguardo il dataset
     print('\n------------------------------------------------------------------------------------------------------------------------------------')
@@ -124,13 +124,14 @@ def start_menu():
                 # [a] kNN (Scikit-learn)
                 if classifierChoice == classifier_options[0]:
                     if feature_sel_switch == 0:
-                        knn.KNN_classifier(X, y)
+                        test_accuracy, train_accuracy = knn.KNN_classifier(X, y)
                         # rimuovere questo per fare il tuning del modello
                         # knn.KNN_classifier_with_tuning(X, y)
                     else:
                         # rimuovere questo per calcolare la soglia migliore
                         # threshold, X_selected = feature_selection.better_threshold(X, y, knn.KNN_classifier)
-                        knn.KNN_classifier(X_selected, y)
+                        test_accuracy, train_accuracy = knn.KNN_classifier(X_selected, y)
+                    plot.print_metrics("kNN", test_accuracy, train_accuracy)
                     
 
                 # [b] Random Forest(Scikit-learn)
@@ -195,5 +196,6 @@ if __name__ == "__main__":
     pd.options.display.max_rows = 5000                 
 
     # Menu Principale di scelta
-    start_menu()
+    # start_menu()
+    knn.KNN_classifier_with_tuning(X, y)
     
