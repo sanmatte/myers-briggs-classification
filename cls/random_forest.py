@@ -35,14 +35,14 @@ def random_forest_classifier_with_tuning(X, y):
         'min_samples_leaf': list(map(int, list(range(1, 5)))) # [1, 2, 3, 4]
     }
 
-    # Crea e addestra un RandomForestClf clf con iperparametri = n_neighbors
+    # Crea un nuovo modello RandomForestClassifier
     rf = RandomForestClassifier(random_state=42)
 
     # Cerca i migliori iperparametri e addestra il modello con essi
     grid_search = GridSearchCV(rf, param_grid, cv=5, n_jobs=-1, verbose=3)
     grid_search.fit(X_train, y_train)
 
-    # Ottieni il miglior modello
+    # Ottiene il miglior modello
     best_rf = grid_search.best_estimator_
     
     # Predizioni

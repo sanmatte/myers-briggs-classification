@@ -1,61 +1,14 @@
-import pandas as pd
 from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score, classification_report
-import matplotlib.pyplot as plt
-
-
-def SVM_classifier_with_tuning(X, y):
-    param_grid = {
-    'C': [0.1, 1, 10],  
-    'gamma': ['scale', 0.01, 0.1],  
-    'kernel': ['rbf']
-    }
-
-    # Suddivisione in training e test set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
-
-    # Standardizzazione delle feature
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
-
-    # Addestramento del modello SVM con GridSearchCV
-    svm_model = SVC()
-    grid_search = GridSearchCV(svm_model, param_grid, cv=3, scoring='accuracy', verbose=1, n_jobs=-1)
-
-    # Esegui la ricerca dei migliori parametri
-    grid_search.fit(X_train_scaled, y_train)
-
-    # Stampiamo i migliori parametri trovati
-    print("Migliori parametri trovati:", grid_search.best_params_)
-    print("Migliore accuratezza (cross-validation):", grid_search.best_score_)
-
-    # Usa il miglior modello trovato
-    best_svm = grid_search.best_estimator_
-    
-    # Predizioni su training e test set
-    # y_train_pred = best_svm.predict(X_train_scaled)
-    y_test_pred = best_svm.predict(X_test_scaled)
-
-    # Valutazione del modello
-    #train_accuracy = accuracy_score(y_train, y_train_pred)
-    test_accuracy = accuracy_score(y_test, y_test_pred)
-
-    print("\nSVM Model Performance:")
-    #print(f'Accuratezza sul TRAIN: {train_accuracy}')
-    print(f'Accuratezza sul TEST: {test_accuracy}')
-    
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_test_pred))
+from sklearn.metrics import accuracy_score
+from sklearn.svm import SVC
 
 def SVM_classifier(X, y, C=1, gamma='scale', kernel='rbf'):
 
     # Divide il dataset in train e test
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
 
-    # Training del modello ...
+    # Definire e Trainare il modello con iperparametri fissi (scelti tramite tuning)
     svm_model = SVC(C=C, gamma=gamma, kernel=kernel)
     svm_model.fit(X_train, y_train)
 
@@ -64,13 +17,48 @@ def SVM_classifier(X, y, C=1, gamma='scale', kernel='rbf'):
     y_test_pred = svm_model.predict(X_test)
 
     # Valutazione del modello - Calcola 'Accuracy on training set' e 'Accuracy on test set'
-    # train_accuracy = accuracy_score(y_train, y_train_pred)
+    train_accuracy = 0
+    #train_accuracy = accuracy_score(y_train, y_train_pred)
     test_accuracy = accuracy_score(y_test, y_test_pred)
 
     # return 'Training Accuracy' e 'Test Accuracy'
-    print("\nSVM Model Performance:")
-    # print(f'Accuratezza sul TRAIN: {train_accuracy}')
-    print(f'Accuratezza sul TEST: {test_accuracy}')
+    return test_accuracy, train_accuracy
+
+def SVM_classifier_with_tuning(X, y):
+
+    param_grid = {
+    'C': [0.1, 1, 10],  
+    'gamma': ['scale', 0.01, 0.1],  
+    'kernel': ['rbf']
+    }
+
+    # Divide il dataset in train e test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
+
+    # Standardizzazione delle features
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    # Crea un nuovo modello SVC
+    svm_model = SVC()
+
+    # Cerca i migliori iperparametri e addestra il modello con essi
+    grid_search = GridSearchCV(svm_model, param_grid, cv=3, scoring='accuracy', verbose=1, n_jobs=-1)
+    grid_search.fit(X_train_scaled, y_train)
+
+    # Ottiene il miglior modello
+    best_svm = grid_search.best_estimator_
     
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_test_pred))
+    # Predizioni su training e test set
+    # y_train_pred = best_svm.predict(X_train_scaled)
+    y_test_pred = best_svm.predict(X_test_scaled)
+
+    # Valutazione del modello
+    train_accuracy = 0
+    #train_accuracy = accuracy_score(y_train, y_train_pred)
+    test_accuracy = accuracy_score(y_test, y_test_pred)
+
+    print(f"Best SVM Accuracy: {test_accuracy}")
+    print("Best Parameters:", grid_search.best_params_)
+    print("Best CV Accuracy:", grid_search.best_score_)

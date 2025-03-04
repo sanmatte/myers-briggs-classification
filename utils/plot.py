@@ -21,7 +21,6 @@ def print_metrics(clf_name, test_accuracy, train_accuracy = 'NP'):
     print(tabulate(table, headers=header, tablefmt="grid"))
     print()
 
-
 # Mostra la matrice di correlazione fra le diverse domande
 def correlation_matrix_chart(X, corr_method):
 
@@ -35,68 +34,6 @@ def correlation_matrix_chart(X, corr_method):
     # Mostra il grafico
     mpl.title(f"Matrice di Correlazione - Coefficiente di correlazione: {corr_method}", fontsize = 18)
     mpl.show()
-
-def plot_likert(X):
-
-    # Definizione delle categorie di risposta
-    response_mapping = {
-        -3: "Molto in disaccordo",
-        -2: "Disaccordo",
-        -1: "Abbastanza in disaccordo",
-        0: "Né d’accordo né in disaccordo",
-        1: "Abbastanza d’accordo",
-        2: "D’accordo",
-        3: "Molto d’accordo"
-    }
-
-    # Rinomina le colonne con un identificativo progressivo Q# al posto dell'intera domanda per una maggiore leggibilità
-    qq = ['Q'+str(i) for i in range(1,len(X.columns)+1)]
-    X.columns = qq
-
-    # Colori per le categorie Likert
-    colors = ["firebrick", "lightcoral", "rosybrown", "gainsboro", "lightskyblue", "cornflowerblue", "darkblue"]
-
-    # Seleziona casualmente 5 colonne
-    random_columns = X.sample(n=8, axis=1).columns
-
-    # Filtra il DataFrame con le colonne scelte
-    data_subset = X[random_columns]
-
-    # Conta le occorrenze di ogni risposta per ogni domanda selezionata
-    response_counts = data_subset.apply(pd.Series.value_counts).fillna(0).astype(int)
-
-    # Rinomina le righe con le etichette di risposta
-    response_counts.index = response_counts.index.map(response_mapping)
-
-    # Ordina le risposte secondo la scala Likert
-    response_counts = response_counts.loc[["Molto in disaccordo", "Disaccordo", "Abbastanza in disaccordo",
-                                        "Né d’accordo né in disaccordo", "Abbastanza d’accordo",
-                                        "D’accordo", "Molto d’accordo"]]
-
-    # Trasponi per avere domande come righe e categorie Likert come colonne
-    likert_data = response_counts.T
-
-    # Converti in percentuali
-    likert_data_percentage = likert_data.div(likert_data.sum(axis=1), axis=0) * 100
-
-    # Creazione del grafico
-    fig, ax = plt.subplots(figsize=(12, 8))
-    cumsum_data = likert_data_percentage.cumsum(axis=1)
-
-    for i, category in enumerate(likert_data_percentage.columns):
-        ax.barh(likert_data_percentage.index, likert_data_percentage[category], 
-                left=(cumsum_data[category] - likert_data_percentage[category]), 
-                color=colors[i], label=category)
-
-    ax.set_xlabel("Percentage")
-    ax.set_title("Distribuzione delle risposte Likert")
-    ax.legend(title="Scala Likert", bbox_to_anchor=(1.05, 1), loc='upper left')
-
-    # Linea verticale per evidenziare il neutrale
-    ax.axvline(50, color="gray", linestyle="dashed")
-
-    plt.tight_layout()
-    plt.show()
 
 def question_distribution_chart(X):
     hex_colors = [

@@ -131,30 +131,37 @@ def start_menu():
                         # rimuovere questo per calcolare la soglia migliore
                         # threshold, X_selected = feature_selection.better_threshold(X, y, knn.KNN_classifier)
                         test_accuracy, train_accuracy = knn.KNN_classifier(X_selected, y)
+
+                    # Stampa le metriche del modello addestrato e ottimizzato
                     plot.print_metrics("kNN", test_accuracy, train_accuracy)
-                    
 
                 # [b] Random Forest(Scikit-learn)
                 if classifierChoice == classifier_options[1]:
                     if feature_sel_switch == 0:
-                        random_forest.random_forest_classifier(X, y)
+                        test_accuracy, train_accuracy = random_forest.random_forest_classifier(X, y)
                         # rimuovere questo per fare il tuning del modello
                         # random_forest.random_forest_classifier_with_tuning(X, y)
                     else:
                         # rimuovere questo per calcolare la soglia migliore
-                        threshold, X_selected = feature_selection.better_threshold(X, y, random_forest.random_forest_classifier)
-                        random_forest.random_forest_classifier(X_selected, y)
+                        # threshold, X_selected = feature_selection.better_threshold(X, y, random_forest.random_forest_classifier)
+                        test_accuracy, train_accuracy = random_forest.random_forest_classifier(X_selected, y)
+
+                    # Stampa le metriche del modello addestrato e ottimizzato
+                    plot.print_metrics("Random Forest", test_accuracy, train_accuracy)
 
                 # [c] SVM (Scikit-learn)
                 if classifierChoice == classifier_options[2]:
                     if feature_sel_switch == 0:
-                        svm.SVM_classifier(X, y)
+                        test_accuracy, train_accuracy = svm.SVM_classifier(X, y)
                         # rimuovere questo per fare il tuning del modello
                         # svm.SVM_classifier_with_tuning(X, y)
                     else:
                         # rimuovere questo per calcolare la soglia migliore
                         # threshold, X_selected = feature_selection.better_threshold(X, y, SVM_classifier)
-                        svm.SVM_classifier(X_selected, y)
+                        test_accuracy, train_accuracy = svm.SVM_classifier(X_selected, y)
+
+                    # Stampa le metriche del modello addestrato e ottimizzato
+                    plot.print_metrics("SVM", test_accuracy, train_accuracy)
 
                 # [d] Naive-Bayes (Custom)
                 if classifierChoice == classifier_options[3]:
@@ -196,6 +203,5 @@ if __name__ == "__main__":
     pd.options.display.max_rows = 5000                 
 
     # Menu Principale di scelta
-    # start_menu()
-    knn.KNN_classifier_with_tuning(X, y)
+    start_menu()
     
