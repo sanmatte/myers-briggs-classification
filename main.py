@@ -180,7 +180,7 @@ def start_menu():
                         ensambe_custom.ensamble_classifiers(X, y)
                     else:
                         ensambe_custom.ensamble_classifiers(X_selected, y)
-                        
+
                     # Stampa le metriche del modello addestrato e ottimizzato
                     plot.print_metrics("SVM", test_accuracy, train_accuracy)
 
@@ -200,7 +200,7 @@ def start_menu():
 if __name__ == "__main__":
 
     # Legge il file csv dal path specificato e lo inserisce in un dataframe pandas
-    df = pd.read_csv('16P.csv', encoding='cp1252') # 0x92 is usually a smart quote in the windows-1252 encoding.It is not a valid UTF-8 character, so that's why csv refuses to parse it. (from reddit)
+    df = pd.read_csv('16P.csv', encoding='cp1252') # carattere 0x92 in una delle domande (non utf-8)
 
     # Divide il dataframe in data-matrix (X) e label-vector (y)
     X = df.drop(['Personality', 'Response Id'], axis=1)

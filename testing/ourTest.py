@@ -1,5 +1,8 @@
 import survey # pip install survey
 import numpy as np
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
 
 
 def start_survey():
@@ -97,6 +100,20 @@ def start_survey():
         responses[i] = 3 - index  # in base alla selezione, la risposta avrà peso compreso da 3 a -3
 
     print("Risposte registrate:", responses)
+    knn_classify(responses)
     
-def knn_classify():
-    pass
+def knn_classify(response):
+    df = pd.read_csv('16P.csv', encoding='cp1252')
+
+    X = df.drop(['Personality', 'Response Id'], axis=1)
+    y = df['Personality']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
+    #fit
+    clf = KNeighborsClassifier(n_neighbors=4)
+    clf.fit(X_train, y_train)
+    # converte response a dataframe
+    response = pd.DataFrame([response], columns=X.columns)
+    #predict
+    prediction = clf.predict(response)
+    print(f"\nLa tua personalità è: {prediction}\n")

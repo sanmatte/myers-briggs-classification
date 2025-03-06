@@ -88,3 +88,5 @@ def random_under(df):
     pred_y = knn.predict(test_x)
     print('Accuratezza del knn dopo random undersampling %s' % compute_accuracy(test_y, pred_y))
 
+
+
