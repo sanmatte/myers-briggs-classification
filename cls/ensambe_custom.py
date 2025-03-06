@@ -6,6 +6,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+from timeit import default_timer as timer
 
 def majority_voting(label, proba, voting, w=None):
     if voting == "hard":    #Hard voting
@@ -58,6 +59,8 @@ class Ensemble:
 
 #Esempio di utilizzo
 def ensamble_classifiers(X, y):
+    start = timer()
+
     labels = np.unique(y)
     train_x, test_x, train_y, test_y = train_test_split(X, y, test_size=0.20, stratify=y)
     print('Shape training set:', train_x.shape)
@@ -70,4 +73,10 @@ def ensamble_classifiers(X, y):
     e_clf.fit(train_x, train_y, labels)
     pred_test_y = e_clf.predict(test_x)
     print("Accuracy: ", accuracy_score(test_y, pred_test_y))
-    return accuracy_score(test_y, pred_test_y)
+    
+    end = timer()
+    ctime = end - start
+    ctime, metric = [ctime, "seconds"] if ctime < 120 else [ctime/60, "minutes"]
+    print(f"\nDone: {ctime:.2f}, {metric}")
+
+    return accuracy_score(test_y, pred_test_y), "Not Calculated"

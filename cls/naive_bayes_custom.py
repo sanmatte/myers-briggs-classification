@@ -146,10 +146,7 @@ def Naive_Bayes_Custom(X, y):
     ctime = end - start
 
     ctime, metric = [ctime, "seconds"] if ctime < 120 else [ctime/60, "minutes"]
-    print(f"Done: {ctime:.2f}, {metric}\n")
-    
-    # print(f"Train Accuracy: {train_accuracy}")
-    print(f"Test Accuracy: {test_accuracy}")
+    print(f"\nDone: {ctime:.2f}, {metric}")
 
     #return train_accuracy, test_accuracy
-    return test_accuracy
+    return test_accuracy, "Not Calculated"

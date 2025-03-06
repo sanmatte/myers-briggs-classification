@@ -2,9 +2,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 import utils.plot as plot
+from timeit import default_timer as timer
 
 def KNN_classifier(X, y, k=4):
 
+    start = timer()
     # Divide il dataset in train e test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
 
@@ -20,12 +22,18 @@ def KNN_classifier(X, y, k=4):
     train_accuracy = 'Not Calculated'
     #train_accuracy = accuracy_score(y_train, y_train_pred)
     test_accuracy = accuracy_score(y_test, y_test_pred)
-
+    
+    end = timer()
+    ctime = end - start
+    ctime, metric = [ctime, "seconds"] if ctime < 120 else [ctime/60, "minutes"]
+    print(f"\nDone: {ctime:.2f}, {metric}")
     # return 'Training Accuracy' e 'Test Accuracy'
     return test_accuracy, train_accuracy
 
 
 def KNN_classifier_with_tuning(X, y):
+    start = timer()
+
     # range di valori per l'iperparametro n_neighbors
     neighbor_number = range(1, 6)
 
@@ -46,6 +54,12 @@ def KNN_classifier_with_tuning(X, y):
 
     # Stampa il valore di k con il quale il classificatore ha ottenuto le migliori prestazioni
     print(f"L'acuratezza migliore registrata è {max(total_test_accuracy)}\n Il valore migliore di k è `{total_test_accuracy.index(max(total_test_accuracy))+1}`")
+    
+    end = timer()
+    ctime = end - start
+    ctime, metric = [ctime, "seconds"] if ctime < 120 else [ctime/60, "minutes"]
+    
+    print(f"Tuning Time: {ctime:.2f}, {metric}\n")
 
     # stampa il plot
-    plot.trainingAccuracy_vs_testAccuracy_chart(neighbor_number, neighbor_number, total_training_accuracy, total_test_accuracy, "Training Accuracy", "Test Accuracy", "Number of Neighbors", "Accuracy", "Tuning KNN")
+    # plot.trainingAccuracy_vs_testAccuracy_chart(neighbor_number, neighbor_number, total_training_accuracy, total_test_accuracy, "Training Accuracy", "Test Accuracy", "Number of Neighbors", "Accuracy", "Tuning KNN")

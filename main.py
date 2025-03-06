@@ -43,10 +43,10 @@ def data_analysis(X):
 
 FEATURES_SWITCH = {0: 'OFF', 1: 'ON'}
 feature_sel_switch = 0
-OVER_SAMPLING_LIST = ['OFF', 'SMOTE', 'Random OverSampler', 'Oversampling + Undersampling']
-UNDER_SAMPLING_LIST = ['OFF', 'Cluster Centroids','Random UnderSampler', 'Oversampling + Undersampling']
-SAMPLING_FUNCTIONS = {0: pp.smote, 1: pp.random_over, 2: pp.hybrid_resampling ,3: pp.cluster_centroids, 4: pp.random_under, 5: pp.hybrid_resampling}
-OFFSET = 3 # numero di funzioni di oversampling
+OVER_SAMPLING_LIST = ['OFF', 'SMOTE', 'Random OverSampler']
+UNDER_SAMPLING_LIST = ['OFF', 'Cluster Centroids','Random UnderSampler']
+SAMPLING_FUNCTIONS = {0: pp.smote, 1: pp.random_over, 2: pp.cluster_centroids, 3: pp.random_under}
+OFFSET = 2 # numero di funzioni di oversampling
 over_sampling_switch = -1
 under_sampling_switch = -1
 
@@ -120,6 +120,7 @@ def start_menu():
             while(returnToMainMenu == False):
                 classifierIndex = classifierMenu.show()
                 classifierChoice = classifier_options[classifierIndex]
+                #print("\n\n")
                 
                 # [a] kNN (Scikit-learn)
                 if classifierChoice == classifier_options[0]:
@@ -169,6 +170,9 @@ def start_menu():
                         naive_bayes_custom.Naive_Bayes_Custom(X, y)
                     else:
                         naive_bayes_custom.Naive_Bayes_Custom(X_selected, y)
+                    
+                    # Stampa le metriche del modello addestrato e ottimizzato
+                    plot.print_metrics("SVM", test_accuracy, train_accuracy)
 
                 # [e] Ensemble (Custom)
                 if classifierChoice ==  classifier_options[4]:
@@ -176,6 +180,9 @@ def start_menu():
                         ensambe_custom.ensamble_classifiers(X, y)
                     else:
                         ensambe_custom.ensamble_classifiers(X_selected, y)
+                        
+                    # Stampa le metriche del modello addestrato e ottimizzato
+                    plot.print_metrics("SVM", test_accuracy, train_accuracy)
 
                 # [f] Return to Main Menu
                 if classifierChoice == classifier_options[5]:

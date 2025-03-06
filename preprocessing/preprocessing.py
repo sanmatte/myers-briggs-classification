@@ -88,35 +88,3 @@ def random_under(df):
     pred_y = knn.predict(test_x)
     print('Accuratezza del knn dopo random undersampling %s' % compute_accuracy(test_y, pred_y))
 
-
-# combinazione di tecniche di resampling
-
-def hybrid_resampling(df):
-    # Campiona dataset
-    df_sampled = df.sample(frac=0.5, random_state=42)
-
-    X = df_sampled.drop(columns=['Personality', 'Response Id'], axis=1) 
-    y = df_sampled['Personality']
-
-    # Split into train and test sets
-    train_x, test_x, train_y, test_y = train_test_split(X, y, random_state=42, test_size=0.2)
-
-    # Apply undersampling (Cluster Centroids) first
-    cc = ClusterCentroids(random_state=42)
-    X_under, y_under = cc.fit_resample(train_x, train_y)
-    for cls, count in Counter(y_under).items():
-        print(f"{cls} : {count}")
-
-    # Apply oversampling (SMOTE-NC) to balance minority classes
-    smote = SMOTE(random_state=42)
-    X_resampled, y_resampled = smote.fit_resample(X_under, y_under)
-    for cls, count in Counter(y_resampled).items():
-        print(f"{cls} : {count}")
-
-    # Train kNN model
-    knn = KNeighborsClassifier(4)
-    knn.fit(X_resampled, y_resampled)
-    pred_y = knn.predict(test_x)
-
-    # Print accuracy
-    print('Accuratezza del kNN dopo Hybrid Resampling %s' % compute_accuracy(test_y, pred_y))

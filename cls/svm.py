@@ -2,8 +2,10 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
 from sklearn.svm import SVC
+from timeit import default_timer as timer
 
 def SVM_classifier(X, y, C=1, gamma='scale', kernel='rbf'):
+    start = timer()
 
     # Divide il dataset in train e test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
@@ -21,11 +23,16 @@ def SVM_classifier(X, y, C=1, gamma='scale', kernel='rbf'):
     #train_accuracy = accuracy_score(y_train, y_train_pred)
     test_accuracy = accuracy_score(y_test, y_test_pred)
 
+    end = timer()
+    ctime = end - start
+    ctime, metric = [ctime, "seconds"] if ctime < 120 else [ctime/60, "minutes"]
+    print(f"\nDone: {ctime:.2f}, {metric}")
+
     # return 'Training Accuracy' e 'Test Accuracy'
     return test_accuracy, train_accuracy
 
 def SVM_classifier_with_tuning(X, y):
-
+    start = timer()
     param_grid = {
     'C': [0.1, 1, 10],  
     'gamma': ['scale', 0.01, 0.1],  
@@ -58,7 +65,12 @@ def SVM_classifier_with_tuning(X, y):
     train_accuracy = 'Not Calculated'
     #train_accuracy = accuracy_score(y_train, y_train_pred)
     test_accuracy = accuracy_score(y_test, y_test_pred)
+    
+    end = timer()
+    ctime = end - start
+    ctime, metric = [ctime, "seconds"] if ctime < 120 else [ctime/60, "minutes"]
 
+    print(f"Tuning Time: {ctime:.2f}, {metric}\n")
     print(f"Best SVM Accuracy: {test_accuracy}")
     print("Best Parameters:", grid_search.best_params_)
     print("Best CV Accuracy:", grid_search.best_score_)

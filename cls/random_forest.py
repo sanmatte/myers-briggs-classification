@@ -1,8 +1,11 @@
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+from timeit import default_timer as timer
 
 def random_forest_classifier(X, y, n_estimators=200, max_depth=16, min_samples_split=2, min_samples_leaf=1):
+    start = timer()
+
     # Divide il dataset in train e test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
 
@@ -19,11 +22,16 @@ def random_forest_classifier(X, y, n_estimators=200, max_depth=16, min_samples_s
     #train_accuracy = accuracy_score(y_train, y_train_pred)
     test_accuracy = accuracy_score(y_test, y_test_pred)
 
+    end = timer()
+    ctime = end - start
+    ctime, metric = [ctime, "seconds"] if ctime < 120 else [ctime/60, "minutes"]
+    print(f"\nDone: {ctime:.2f}, {metric}")
     # return 'Training Accuracy' e 'Test Accuracy'
     return test_accuracy, train_accuracy
 
 
 def random_forest_classifier_with_tuning(X, y):
+    start = timer()
     # Divide il dataset in train e test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42, stratify=y)
 
@@ -54,6 +62,11 @@ def random_forest_classifier_with_tuning(X, y):
     #train_accuracy = accuracy_score(y_train, y_train_pred)
     test_accuracy = accuracy_score(y_test, y_test_pred)
 
+    end = timer()
+    ctime = end - start
+    ctime, metric = [ctime, "seconds"] if ctime < 120 else [ctime/60, "minutes"]
+    
+    print(f"Tuning Time: {ctime:.2f}, {metric}\n")
     print(f"Best Random Forest Accuracy: {test_accuracy}")
     print("Best Parameters:", grid_search.best_params_)
     print("Best CV Accuracy:", grid_search.best_score_)
