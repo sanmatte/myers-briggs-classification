@@ -30,9 +30,9 @@ def random_forest_classifier_with_tuning(X, y):
     # Definisci i parametri da testare come iperparametri
     param_grid = {
         'n_estimators': [100, 150, 200],
-        'max_depth': list(map(int, list(range(16, 20)))), # [16, 17, 18, 19]
-        'min_samples_split': list(map(int, list(range(1, 6)))), # [1, 2, 3, 4, 5]
-        'min_samples_leaf': list(map(int, list(range(1, 5)))) # [1, 2, 3, 4]
+        'max_depth': list(range(16, 20)), # [16, 17, 18, 19]
+        'min_samples_split': list(range(1, 6)), # [1, 2, 3, 4, 5]
+        'min_samples_leaf': list(range(1, 5)) # [1, 2, 3, 4]
     }
 
     # Definisci il modello Random Forest
