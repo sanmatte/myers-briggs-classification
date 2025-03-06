@@ -32,8 +32,7 @@ def better_threshold(X, y, classifier, **params):
 
         #train_accuracy = "[Not Calculated to reduce complexity time]"
         # Chiama il classificatore con le colonne selezionate
-        test_accuracy = classifier(X_selected, y, **params)
-        # train_accuracy , test_accuracy = classifier(X_selected, y, **params)
+        test_accuracy, train_accuracy = classifier(X_selected, y, **params)
 
         current_accuracy = test_accuracy
 

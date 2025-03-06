@@ -1,6 +1,7 @@
 import survey # pip install survey
 import numpy as np
 
+
 def start_survey():
 
     # Lista di 60 domande
@@ -85,12 +86,17 @@ def start_survey():
     # Sondaggio ...
     for i, question in enumerate(questions):
         print(f"\nDomanda {i+1}/{len(questions)}")
+
         index = survey.routines.select(
-        survey.colors.basic("red") + question,  # Colora la domanda di giallo
-        options=response_options,
-        focus_mark="> ",
-        evade_color=survey.colors.basic("white")  # Colora l'opzione selezionata
-)
+            survey.colors.basic("red") + question,      # Colora la domanda di giallo
+            options=response_options,
+            focus_mark="> ",
+            evade_color=survey.colors.basic("white")    # Colora l'opzione selezionata
+        )  
+
         responses[i] = 3 - index  # in base alla selezione, la risposta avrà peso compreso da 3 a -3
 
     print("Risposte registrate:", responses)
+    
+def knn_classify():
+    pass
