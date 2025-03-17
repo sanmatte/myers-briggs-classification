@@ -1,5 +1,6 @@
-# myers-briggs-classification
-Machine Learning Classification for Myers-Briggs personality test
+# Myers-Briggs Classification
+Machine Learning Classification for Myers-Briggs personality test.
+Project for ML exam.
 ## How to run
 conda:
 ```bash
