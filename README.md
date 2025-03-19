@@ -10,6 +10,10 @@ conda env create -f ML_requirements.yml
 ```bash
 conda activate ML2
 ```
+
+```sh
+python3 main.py
+```
 ## Authors
 
 <a href="https://github.com/sanmatte/myers-briggs-classification/graphs/contributors">
